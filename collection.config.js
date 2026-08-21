@@ -18,6 +18,8 @@ const collection = {
 
   // Where does your knowledge come from? A person, a place, a community.
   source: "Books and literature",
+
+  province: "Siem Reap",
 };
 
 export default collection;
