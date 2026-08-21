@@ -1,84 +1,103 @@
 import collection from "../collection.config.js";
 
 const styles = {
-  wrap: {
-    maxWidth: 760,
-    margin: "0 auto",
+  hero: {
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
     padding: "80px 24px",
+    background:
+      "radial-gradient(circle at 50% 0%, #3A1220 0%, #14181F 60%)",
   },
-  kicker: {
+  badge: {
+    display: "inline-block",
     fontFamily: "'Courier New', monospace",
-    color: "#E8B94A",
-    fontSize: 14,
-    letterSpacing: 3,
+    backgroundColor: "#E8B94A",
+    color: "#14181F",
+    fontWeight: 700,
+    fontSize: 13,
+    letterSpacing: 2,
     textTransform: "uppercase",
+    padding: "8px 18px",
+    borderRadius: 999,
   },
   title: {
-    fontSize: 48,
-    fontWeight: 700,
-    margin: "16px 0 12px",
-    lineHeight: 1.15,
+    fontSize: "clamp(40px, 8vw, 96px)",
+    fontWeight: 800,
+    lineHeight: 1.02,
+    margin: "28px 0 20px",
+    maxWidth: 900,
+    background: "linear-gradient(135deg, #FFFFFF 0%, #E8B94A 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
   },
   description: {
-    fontSize: 18,
-    color: "#97A1B3",
+    fontSize: 20,
+    color: "#B7C0CC",
     lineHeight: 1.6,
+    maxWidth: 620,
     margin: 0,
   },
-  cardRow: {
+  statRow: {
     display: "flex",
     flexWrap: "wrap",
-    gap: 16,
-    marginTop: 48,
+    justifyContent: "center",
+    gap: 48,
+    marginTop: 64,
   },
-  card: {
-    flex: "1 1 220px",
-    padding: 24,
-    backgroundColor: "#1C222C",
-    border: "1px solid #2E3644",
-    borderRadius: 6,
+  stat: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
-  cardLabel: {
-    fontFamily: "'Courier New', monospace",
-    fontSize: 12,
-    color: "#97A1B3",
-    letterSpacing: 1,
+  statValue: {
+    fontSize: 32,
+    fontWeight: 800,
+    color: "#FFFFFF",
     margin: 0,
   },
-  cardValue: {
-    fontSize: 16,
-    margin: "6px 0 0",
+  statLabel: {
+    fontFamily: "'Courier New', monospace",
+    fontSize: 12,
+    letterSpacing: 2,
+    textTransform: "uppercase",
+    color: "#E8B94A",
+    marginTop: 6,
   },
   count: {
     fontFamily: "'Courier New', monospace",
-    fontSize: 14,
-    color: "#E8B94A",
-    marginTop: 48,
+    fontSize: 16,
+    color: "#5A6373",
+    marginTop: 80,
   },
   footer: {
-    marginTop: 64,
-    paddingTop: 24,
-    borderTop: "1px solid #2E3644",
     fontSize: 13,
     color: "#5A6373",
+    maxWidth: 480,
+    margin: "24px auto 0",
+    lineHeight: 1.6,
   },
 };
 
 export default function Home() {
   return (
-    <main style={styles.wrap}>
-      <p style={styles.kicker}>KHMER LIVING ARCHIVE</p>
+    <main style={styles.hero}>
+      <span style={styles.badge}>Khmer Living Archive</span>
       <h1 style={styles.title}>{collection.name}</h1>
       <p style={styles.description}>{collection.description}</p>
 
-      <div style={styles.cardRow}>
-        <div style={styles.card}>
-          <p style={styles.cardLabel}>CURATED BY</p>
-          <p style={styles.cardValue}>{collection.curator}</p>
+      <div style={styles.statRow}>
+        <div style={styles.stat}>
+          <p style={styles.statValue}>{collection.curator}</p>
+          <p style={styles.statLabel}>Curated by</p>
         </div>
-        <div style={styles.card}>
-          <p style={styles.cardLabel}>SOURCE</p>
-          <p style={styles.cardValue}>{collection.source}</p>
+        <div style={styles.stat}>
+          <p style={styles.statValue}>{collection.source}</p>
+          <p style={styles.statLabel}>Source</p>
         </div>
       </div>
 
