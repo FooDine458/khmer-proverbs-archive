@@ -1,4 +1,5 @@
 import collection from "../collection.config.js";
+import EntryCard, { entries } from "./components/EntryCard";
 
 export default function Home() {
   return (
@@ -229,7 +230,7 @@ export default function Home() {
         <section className="kla-section">
           <p className="kla-eyebrow">Status</p>
           <h2 className="kla-section-title">Where things stand</h2>
-          <p className="kla-body">entries in the archive: 0 (for now)</p>
+          <p className="kla-body">entries in the archive: {entries.length} (and growing)</p>
           <ul className="kla-roadmap">
             <li>
               <b>Done</b>
@@ -245,6 +246,16 @@ export default function Home() {
               through a review-and-publish flow.
             </li>
           </ul>
+        </section>
+
+        <section className="kla-section">
+          <p className="kla-eyebrow">Entries</p>
+          <h2 className="kla-section-title">Browse the archive</h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', justifyContent: 'center' }}>
+            {entries.map((entry, index) => (
+              <EntryCard key={index} entry={entry} />
+            ))}
+          </div>
         </section>
 
         <footer className="kla-footer">
