@@ -33,7 +33,7 @@ try {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${latin.variable} ${khmer.variable}`}>
+    <html lang="en" className={`${latin.variable} ${khmer.variable}`} suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
         {children}
