@@ -1,11 +1,8 @@
-import { Manrope, Noto_Sans_Khmer } from "next/font/google";
+import { Plus_Jakarta_Sans, Noto_Sans_Khmer } from "next/font/google";
 import "./globals.css";
 import collection from "../collection.config.js";
 
-// Self-hosted so Khmer script renders the same for every reader instead of
-// depending on whatever font (if any) happens to be installed on their
-// device. next/font ships with Next.js, so this adds no new dependency.
-const latin = Manrope({
+const latin = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--nf-latin",
   display: "swap",

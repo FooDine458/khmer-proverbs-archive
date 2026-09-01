@@ -1,48 +1,37 @@
-// One object in the archive. Khmer name leads, then the photo, then the story.
-
 export default function EntryCard({ entry }) {
-  const { khmerName, romanization, englishName, description } = entry;
-  const { image, imageAlt, contributor, place, verified } = entry;
-
-  // Either field may be missing, so build the line from whatever we have.
-  const attribution = [contributor, place].filter(Boolean).join(", ");
+  const attribution = [entry.contributor, entry.place]
+    .filter(Boolean)
+    .join(", ");
 
   return (
     <article className="entry-card">
-      <span className="entry-selvedge" aria-hidden="true" />
-      <div className="entry-body">
-        <h2 className="entry-khmer" lang="km">
-          {khmerName}
-        </h2>
-        <p className="entry-names">
-          <span className="entry-roman">{romanization}</span>
-          <span className="entry-english">{englishName}</span>
-        </p>
-        {image ? (
-          <div className="entry-photo-well">
-            <img
-              className="entry-photo"
-              src={image}
-              alt={imageAlt || englishName}
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-        ) : null}
-        {description ? (
-          <p className="entry-description">{description}</p>
+      <div className="entry-visual">
+        {entry.image ? (
+          <img
+            src={entry.image}
+            alt={entry.imageAlt || entry.englishName}
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
-          <p className="entry-description entry-description-empty">
-            No description recorded yet.
-          </p>
+          <span className="entry-visual-placeholder">No image</span>
         )}
-        <div className="entry-meta">
-          {attribution ? (
-            <p className="entry-attribution">Told by {attribution}</p>
+      </div>
+      <div className="entry-body">
+        <h3 className="entry-khmer" lang="km">
+          {entry.khmerName}
+        </h3>
+        <p className="entry-names">
+          {entry.romanization} — {entry.englishName}
+        </p>
+        <p className="entry-story">
+          {entry.description || "No description recorded yet."}
+        </p>
+        <div className="entry-footer">
+          {attribution ? <span>{attribution}</span> : null}
+          {!entry.verified ? (
+            <span className="entry-unverified">Spelling unconfirmed</span>
           ) : null}
-          {verified ? null : (
-            <p className="entry-unverified">Khmer spelling not confirmed</p>
-          )}
         </div>
       </div>
     </article>

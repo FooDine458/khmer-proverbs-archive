@@ -1,30 +1,24 @@
 "use client";
 
-// The archive's search instrument. Matches Khmer script, romanization,
-// English name, and description; suggestions appear after a short debounce
-// so the panel never flickers while typing.
-
 import { useEffect, useRef, useState } from "react";
 
-const SEARCH_FIELDS = ["khmerName", "romanization", "englishName", "description"];
+const FIELDS = ["khmerName", "romanization", "englishName", "description"];
 
 export default function SearchBar({ entries, query, onQueryChange }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [deferred, setDeferred] = useState(query);
   const wrapRef = useRef(null);
-  const listId = "search-suggestion-list";
+  const listId = "search-suggestions";
 
-  // Debounce: suggestions follow the query 150ms behind the typing.
   useEffect(() => {
-    const timer = setTimeout(() => setDeferred(query), 150);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setDeferred(query), 150);
+    return () => clearTimeout(t);
   }, [query]);
 
-  // Click or tap anywhere outside closes the suggestion panel.
   useEffect(() => {
-    const onDown = (event) => {
-      if (wrapRef.current && !wrapRef.current.contains(event.target)) {
+    const onDown = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) {
         setOpen(false);
         setActive(-1);
       }
@@ -35,28 +29,21 @@ export default function SearchBar({ entries, query, onQueryChange }) {
 
   const q = deferred.trim().toLowerCase();
   const suggestions = q
-    ? entries
-        .filter((entry) =>
-          SEARCH_FIELDS.some(
-            (field) =>
-              entry[field] && entry[field].toLowerCase().includes(q)
-          )
-        )
-        .slice(0, 5)
+    ? entries.filter((e) => FIELDS.some((f) => e[f] && e[f].toLowerCase().includes(q))).slice(0, 5)
     : [];
 
-  const onKeyDown = (event) => {
-    if (event.key === "Escape") {
+  const onKeyDown = (e) => {
+    if (e.key === "Escape") {
       setOpen(false);
       setActive(-1);
-    } else if (event.key === "ArrowDown") {
-      event.preventDefault();
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
       setOpen(true);
-      setActive((i) => (suggestions.length ? Math.min(i + 1, suggestions.length - 1) : -1));
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
+      setActive((i) => Math.min(i + 1, suggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
       setActive((i) => Math.max(i - 1, -1));
-    } else if (event.key === "Enter" && active >= 0 && suggestions[active]) {
+    } else if (e.key === "Enter" && active >= 0 && suggestions[active]) {
       onQueryChange(suggestions[active].romanization);
       setOpen(false);
       setActive(-1);
@@ -64,7 +51,7 @@ export default function SearchBar({ entries, query, onQueryChange }) {
   };
 
   return (
-    <div className="search-bar" ref={wrapRef}>
+    <div className="search" ref={wrapRef}>
       <span className="search-glyph" aria-hidden="true">
         ⌕
       </span>
@@ -72,14 +59,14 @@ export default function SearchBar({ entries, query, onQueryChange }) {
         type="text"
         className="search-input"
         value={query}
-        placeholder="Search the archive — ស្វែងរក…"
+        placeholder="Search — ស្វែងរក…"
         aria-label="Search the archive"
         aria-expanded={open && q.length > 0}
         aria-controls={listId}
         aria-autocomplete="listbox"
-        aria-activedescendant={active >= 0 ? `suggestion-${active}` : undefined}
-        onChange={(event) => {
-          onQueryChange(event.target.value);
+        aria-activedescendant={active >= 0 ? `s-${active}` : undefined}
+        onChange={(e) => {
+          onQueryChange(e.target.value);
           setOpen(true);
           setActive(-1);
         }}
@@ -101,43 +88,37 @@ export default function SearchBar({ entries, query, onQueryChange }) {
       ) : null}
       {open && q.length > 0 ? (
         <ul className="search-suggestions" id={listId} role="listbox">
-          {suggestions.map((entry, index) => (
+          {suggestions.map((e, i) => (
             <li
-              key={entry.id}
-              id={`suggestion-${index}`}
+              key={e.id}
+              id={`s-${i}`}
               role="option"
-              aria-selected={index === active}
-              className={
-                index === active
-                  ? "search-suggestion active"
-                  : "search-suggestion"
-              }
-              // mousedown, not click, so choosing beats the outside-tap close.
-              onMouseDown={(event) => {
-                event.preventDefault();
-                onQueryChange(entry.romanization);
+              aria-selected={i === active}
+              className={i === active ? "search-suggestion active" : "search-suggestion"}
+              onMouseDown={(ev) => {
+                ev.preventDefault();
+                onQueryChange(e.romanization);
                 setOpen(false);
-                setActive(-1);
               }}
-              onMouseEnter={() => setActive(index)}
+              onMouseEnter={() => setActive(i)}
             >
               <span className="search-suggestion-khmer" lang="km">
-                {entry.khmerName}
+                {e.khmerName}
               </span>
               <span className="search-suggestion-sub">
-                {entry.romanization} — {entry.englishName}
+                {e.romanization} — {e.englishName}
               </span>
             </li>
           ))}
           {suggestions.length === 0 ? (
             <li className="search-suggestion-none">
-              No matches yet — keep typing. Khmer script works too.
+              No matches yet — keep typing. Khmer works too.
             </li>
           ) : (
             <li
               className="search-suggestion-all"
-              onMouseDown={(event) => {
-                event.preventDefault();
+              onMouseDown={(ev) => {
+                ev.preventDefault();
                 setOpen(false);
               }}
             >

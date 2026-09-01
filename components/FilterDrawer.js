@@ -1,9 +1,5 @@
 "use client";
 
-// Slide-out filter panel: right-hand drawer on desktop, bottom sheet on
-// small screens (handled entirely in CSS). Filters apply live so the count
-// behind the scrim updates as the reader chooses.
-
 import { useEffect, useRef } from "react";
 
 const toggleIn = (list, value) =>
@@ -20,37 +16,35 @@ const VERIFIED_OPTIONS = [
 export default function FilterDrawer({ open, onClose, entries, filters, setFilters }) {
   const panelRef = useRef(null);
 
-  // Esc closes; Tab stays inside the panel while it is open.
   useEffect(() => {
     if (!open) return;
-    const onKey = (event) => {
-      if (event.key === "Escape") {
+    const onKey = (e) => {
+      if (e.key === "Escape") {
         onClose();
         return;
       }
-      if (event.key !== "Tab" || !panelRef.current) return;
+      if (e.key !== "Tab" || !panelRef.current) return;
       const items = panelRef.current.querySelectorAll("button, input");
       if (!items.length) return;
       const first = items[0];
       const last = items[items.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
         first.focus();
       }
     };
     document.addEventListener("keydown", onKey);
-    const closeBtn = panelRef.current?.querySelector("button");
-    if (closeBtn) closeBtn.focus();
+    panelRef.current?.querySelector("button")?.focus();
     return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
   if (!open) return null;
 
-  const contributors = unique(entries.map((entry) => entry.contributor));
-  const places = unique(entries.map((entry) => entry.place));
+  const contributors = unique(entries.map((e) => e.contributor));
+  const places = unique(entries.map((e) => e.place));
 
   return (
     <>
@@ -63,14 +57,19 @@ export default function FilterDrawer({ open, onClose, entries, filters, setFilte
         ref={panelRef}
       >
         <div className="drawer-head">
-          <p className="drawer-title">Filters</p>
-          <button type="button" className="drawer-close" onClick={onClose} aria-label="Close filters">
+          <h2>Filters</h2>
+          <button
+            type="button"
+            className="drawer-close"
+            onClick={onClose}
+            aria-label="Close filters"
+          >
             ✕
           </button>
         </div>
         <div className="drawer-body">
           <fieldset className="drawer-section">
-            <legend className="drawer-title">Contributor</legend>
+            <legend className="drawer-section-title">Contributor</legend>
             {contributors.map((name) => (
               <label key={name} className="drawer-option">
                 <input
@@ -88,7 +87,7 @@ export default function FilterDrawer({ open, onClose, entries, filters, setFilte
             ))}
           </fieldset>
           <fieldset className="drawer-section">
-            <legend className="drawer-title">Place</legend>
+            <legend className="drawer-section-title">Place</legend>
             {places.map((place) => (
               <label key={place} className="drawer-option">
                 <input
@@ -103,18 +102,16 @@ export default function FilterDrawer({ open, onClose, entries, filters, setFilte
             ))}
           </fieldset>
           <fieldset className="drawer-section">
-            <legend className="drawer-title">Spelling</legend>
-            {VERIFIED_OPTIONS.map((option) => (
-              <label key={option.value} className="drawer-option">
+            <legend className="drawer-section-title">Spelling</legend>
+            {VERIFIED_OPTIONS.map((opt) => (
+              <label key={opt.value} className="drawer-option">
                 <input
                   type="radio"
                   name="verified-filter"
-                  checked={filters.verified === option.value}
-                  onChange={() =>
-                    setFilters((f) => ({ ...f, verified: option.value }))
-                  }
+                  checked={filters.verified === opt.value}
+                  onChange={() => setFilters((f) => ({ ...f, verified: opt.value }))}
                 />
-                {option.label}
+                {opt.label}
               </label>
             ))}
           </fieldset>
@@ -122,8 +119,10 @@ export default function FilterDrawer({ open, onClose, entries, filters, setFilte
         <div className="drawer-actions">
           <button
             type="button"
-            className="filter-button"
-            onClick={() => setFilters({ contributors: [], places: [], verified: "all" })}
+            className="btn-secondary"
+            onClick={() =>
+              setFilters({ contributors: [], places: [], verified: "all" })
+            }
           >
             Reset
           </button>

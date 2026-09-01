@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "border-left: 3px solid var(--clay)",
+        "files": [
+          "app/globals.css"
+        ],
+        "createdAt": "2026-09-01T07:14:23.760Z",
+        "reason": "pre-existing 3px warning marker on unverified-spelling tag, tied to real semantic state, not a decorative card accent; unchanged from before this session's redesign"
+      }
+    ]
+  }
+}

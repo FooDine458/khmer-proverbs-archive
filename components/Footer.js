@@ -1,6 +1,3 @@
-// Closing line for the page. Kept to one fact and one credit, both pulled
-// from collection.config.js so nothing here goes stale on its own.
-
 import collection from "../collection.config.js";
 
 export default function Footer() {
@@ -8,9 +5,12 @@ export default function Footer() {
 
   return (
     <footer className="site-footer">
-      <p className="footer-text">
-        {collection.name} · started {year} · ICT 340, AUPP
-      </p>
+      <div className="container">
+        <p>
+          {collection.name} · {year} · Curated by {collection.curator}
+        </p>
+        <p className="footer-sub">ICT 340, AUPP</p>
+      </div>
     </footer>
   );
 }
