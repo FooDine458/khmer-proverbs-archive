@@ -1,0 +1,250 @@
+/* ============================================================
+   Khmer Household Archive
+   Palette pulled from the objects: tin, bamboo, unglazed clay,
+   krama indigo. Signature element is the woven selvedge running
+   down the left edge of every card.
+   ============================================================ */
+
+:root {
+  --ink: #17150f;
+  --tin: #d6d8d2;
+  --tin-lit: #e8e9e4;
+  --bamboo: #c4a275;
+  --indigo: #24344d;
+  --clay: #a9522f;
+
+  /* Khmer first. Diacritics sit below the baseline, so this stack is
+     ordered by which faces space them correctly, not by looks. */
+  --font-khmer: "Noto Sans Khmer", "Khmer OS Battambang", "Khmer OS",
+    "Khmer Sangam MN", "Khmer MN", "Hanuman", sans-serif;
+  --font-latin: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--tin);
+  color: var(--ink);
+  font-family: var(--font-latin);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 3px;
+}
+
+/* ---------- page ---------- */
+
+.page {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
+}
+
+.page-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--indigo);
+  margin: 0 0 1rem;
+}
+
+.page-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 1.25rem;
+  max-width: 20ch;
+}
+
+.page-intro {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  max-width: 52ch;
+  margin: 0 0 1rem;
+}
+
+.page-credit {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--indigo);
+  margin: 0;
+}
+
+/* The woven rule: the krama grid flattened into a single band. */
+.page-rule {
+  height: 12px;
+  margin: 3rem 0;
+  background-color: var(--indigo);
+  background-image: repeating-linear-gradient(
+      90deg,
+      rgba(232, 233, 228, 0.5) 0 3px,
+      transparent 3px 8px
+    ),
+    repeating-linear-gradient(0deg, var(--clay) 0 4px, transparent 4px 9px);
+}
+
+.entries-heading {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--indigo);
+  margin: 0 0 1.5rem;
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  gap: 1.5rem;
+}
+
+/* ---------- card ---------- */
+
+.entry-card {
+  display: flex;
+  background-color: var(--tin-lit);
+  border: 1px solid var(--bamboo);
+  overflow: hidden;
+  transition: border-color 120ms ease;
+}
+
+.entry-card:hover {
+  border-color: var(--indigo);
+}
+
+/* The signature. Warp in tin, weft in clay, over an indigo ground. */
+.entry-selvedge {
+  flex: 0 0 10px;
+  background-color: var(--indigo);
+  background-image: repeating-linear-gradient(
+      90deg,
+      rgba(232, 233, 228, 0.55) 0 2px,
+      transparent 2px 5px
+    ),
+    repeating-linear-gradient(0deg, var(--clay) 0 3px, transparent 3px 7px);
+}
+
+.entry-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem 1.5rem 1.25rem;
+}
+
+.entry-khmer {
+  font-family: var(--font-khmer);
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 400;
+  /* Generous leading so coeng and subscript vowels never collide. */
+  line-height: 1.9;
+  margin: 0 0 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+.entry-names {
+  margin: 0 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.entry-roman {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  color: var(--indigo);
+}
+
+.entry-english {
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+/* Backgrounds are cut out of the photos, so the objects sit straight on the
+   card. contain, not cover, because a cutout must never be cropped. The box is
+   reserved by aspect-ratio, so nothing jumps as images load. */
+.entry-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  margin: 0 0 1.25rem;
+}
+
+.entry-description {
+  margin: 0 0 1.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.entry-description-empty {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--indigo);
+  opacity: 0.7;
+}
+
+/* Pushed to the bottom so cards line up whatever the description length. */
+.entry-meta {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bamboo);
+}
+
+.entry-attribution {
+  font-size: 0.8125rem;
+  color: var(--indigo);
+  margin: 0;
+}
+
+.entry-unverified {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--clay);
+  margin: 0.5rem 0 0;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--clay);
+}
+
+/* ---------- small screens ---------- */
+
+@media (max-width: 40rem) {
+  .page {
+    padding: 2.5rem 1rem 4rem;
+  }
+
+  .page-rule {
+    margin: 2rem 0;
+  }
+
+  .entry-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .entry-body {
+    padding: 1.25rem 1.125rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-card {
+    transition: none;
+  }
+}

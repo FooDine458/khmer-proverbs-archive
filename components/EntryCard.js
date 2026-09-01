@@ -1,63 +1,48 @@
-import collection from "../collection.config.js";
-
-// Sample data: two real entries from the archive
-const entries = [
-  {
-    title: "Knowing ten things does not equal mastering one",
-    description: "Said to someone who dabbles widely but goes deep in nothing — a reminder that breadth without mastery is its own kind of ignorance.",
-    contributor: collection.curator,
-    place: "Siem Reap",
-  },
-  {
-    title: "A single bracelet does not jingle",
-    description: "Means that one person alone cannot create change or make an impact; it takes a group or community to produce sound and progress.",
-    contributor: collection.curator,
-    place: "Battambang",
-  },
-];
+// One object in the archive. Khmer name leads, then the photo, then the story.
 
 export default function EntryCard({ entry }) {
+  const { khmerName, romanization, englishName, description } = entry;
+  const { image, imageAlt, contributor, place, verified } = entry;
+
+  // Either field may be missing, so build the line from whatever we have.
+  const attribution = [contributor, place].filter(Boolean).join(", ");
+
   return (
-    <div style={{
-      border: '1px solid #232B38',
-      borderRadius: '10px',
-      padding: '24px',
-      marginBottom: '24px',
-      backgroundColor: '#1A1F29',
-      flexGrow: 1,
-      flexBasis: 'calc(50% - 16px)', // For two cards per row with gap
-      boxSizing: 'border-box',
-    }}>
-      <h2 style={{
-        margin: '0 0 12px 0',
-        fontSize: '24px',
-        fontWeight: '700',
-        color: '#F5F7FA',
-      }}>
-        {entry.title}
-      </h2>
-      <p style={{
-        margin: '0 0 16px 0',
-        fontSize: '17px',
-        lineHeight: '1.75',
-        color: '#AEB6C2',
-      }}>
-        {entry.description}
-      </p>
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '16px',
-        fontSize: '14px',
-        color: '#97A1B3',
-      }}>
-        <span>
-          <strong>Contributor:</strong> {entry.contributor}
-        </span>
-        <span>
-          <strong>Place:</strong> {entry.place || 'Unknown'}
-        </span>
+    <article className="entry-card">
+      <span className="entry-selvedge" aria-hidden="true" />
+      <div className="entry-body">
+        <h2 className="entry-khmer" lang="km">
+          {khmerName}
+        </h2>
+        <p className="entry-names">
+          <span className="entry-roman">{romanization}</span>
+          <span className="entry-english">{englishName}</span>
+        </p>
+        {image ? (
+          <img
+            className="entry-photo"
+            src={image}
+            alt={imageAlt || englishName}
+            loading="lazy"
+            decoding="async"
+          />
+        ) : null}
+        {description ? (
+          <p className="entry-description">{description}</p>
+        ) : (
+          <p className="entry-description entry-description-empty">
+            No description recorded yet.
+          </p>
+        )}
+        <div className="entry-meta">
+          {attribution ? (
+            <p className="entry-attribution">Told by {attribution}</p>
+          ) : null}
+          {verified ? null : (
+            <p className="entry-unverified">Khmer spelling not confirmed</p>
+          )}
+        </div>
       </div>
-    </div>
+    </article>
   );
 }

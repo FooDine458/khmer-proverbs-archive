@@ -1,25 +1,26 @@
 // ============================================================
 //  YOUR ARCHIVE STARTS HERE
 //
-//  This is the only file you edit in Lab 1.
-//  Change the four values below, commit, and watch your
-//  live site update itself.
+//  This file is the single source of the archive's identity.
+//  Every other file reads these values instead of hard-coding
+//  them, so changing a name here changes it everywhere.
 // ============================================================
 
 const collection = {
-  // What does your archive collect? e.g. "Khmer Proverbs"
-  name: "Khmer proverbs: knowing 10 things does not equal mastering one. ",
+  // What does your archive collect?
+  name: "Khmer Household Archive",
 
   // One sentence: what is this archive, and why does it matter?
-  description: "A living archive of Khmer proverbs, preserving pieces of Khmer cultural wisdom that might otherwise fade between generations.",
+  description:
+    "Everyday Cambodian household objects. Not antiques, not museum pieces. The things that sit in an ordinary kitchen or under a stilt house and get used daily without anyone thinking about them.",
 
   // Who is building this archive? Your name, as you want it shown.
-  curator: "Saidudine Lim",
+  curator: "Saifudine Lim",
 
   // Where does your knowledge come from? A person, a place, a community.
-  source: "Books and literature",
+  source: "Told by family, by name",
 
-  province: "Siem Reap",
+  province: "Kampong Cham",
 };
 
 export default collection;
