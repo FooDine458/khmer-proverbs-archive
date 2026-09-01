@@ -19,13 +19,15 @@ export default function EntryCard({ entry }) {
           <span className="entry-english">{englishName}</span>
         </p>
         {image ? (
-          <img
-            className="entry-photo"
-            src={image}
-            alt={imageAlt || englishName}
-            loading="lazy"
-            decoding="async"
-          />
+          <div className="entry-photo-well">
+            <img
+              className="entry-photo"
+              src={image}
+              alt={imageAlt || englishName}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         ) : null}
         {description ? (
           <p className="entry-description">{description}</p>
