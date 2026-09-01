@@ -1,4 +1,5 @@
 import collection from "../collection.config.js";
+import ThemeToggle from "./ThemeToggle.js";
 
 export default function Header() {
   return (
@@ -7,10 +8,13 @@ export default function Header() {
         <a href="/" className="site-logo">
           {collection.name}
         </a>
-        <nav className="site-nav" aria-label="Primary">
-          <a href="#archive">Archive</a>
-          <a href="#about">About</a>
-        </nav>
+        <div className="site-header-right">
+          <nav className="site-nav" aria-label="Primary">
+            <a href="#archive">Archive</a>
+            <a href="#about">About</a>
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

@@ -22,7 +22,7 @@ export default function EntryCard({ entry }) {
           {entry.khmerName}
         </h3>
         <p className="entry-names">
-          {entry.romanization} — {entry.englishName}
+          {entry.romanization} · {entry.englishName}
         </p>
         <p className="entry-story">
           {entry.description || "No description recorded yet."}

@@ -20,10 +20,24 @@ export const metadata = {
   description: collection.description,
 };
 
+// Runs before hydration so an explicit theme choice applies on first paint,
+// instead of flashing the OS-preference theme and then swapping.
+const THEME_BOOTSTRAP = `
+try {
+  var t = window.localStorage.getItem("theme");
+  if (t === "light" || t === "dark") {
+    document.documentElement.setAttribute("data-theme", t);
+  }
+} catch (e) {}
+`;
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${latin.variable} ${khmer.variable}`}>
-      <body>{children}</body>
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
+        {children}
+      </body>
     </html>
   );
 }

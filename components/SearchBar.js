@@ -59,7 +59,7 @@ export default function SearchBar({ entries, query, onQueryChange }) {
         type="text"
         className="search-input"
         value={query}
-        placeholder="Search — ស្វែងរក…"
+        placeholder="Search · ស្វែងរក…"
         aria-label="Search the archive"
         aria-expanded={open && q.length > 0}
         aria-controls={listId}
@@ -106,13 +106,13 @@ export default function SearchBar({ entries, query, onQueryChange }) {
                 {e.khmerName}
               </span>
               <span className="search-suggestion-sub">
-                {e.romanization} — {e.englishName}
+                {e.romanization} · {e.englishName}
               </span>
             </li>
           ))}
           {suggestions.length === 0 ? (
             <li className="search-suggestion-none">
-              No matches yet — keep typing. Khmer works too.
+              No matches yet. Keep typing, Khmer works too.
             </li>
           ) : (
             <li

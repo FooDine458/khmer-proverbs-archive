@@ -1,4 +1,4 @@
-/* Modern archive design system — plain CSS, no framework */
+/* Modern archive design system, plain CSS, no framework */
 
 :root {
   --bg: #f7f6f2;
@@ -17,6 +17,11 @@
   --radius: 1.5rem;
   --radius-lg: 2rem;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --header-bg: rgba(255, 255, 255, 0.72);
+  --surface-glow: radial-gradient(circle at 50% 40%, #fff 0%, var(--bg) 100%);
+  --btn-hover-shadow: 0 12px 32px rgba(182, 95, 60, 0.3);
+  --focus-ring-border: rgba(182, 95, 60, 0.4);
 
   --font-latin: var(--nf-latin), 'Plus Jakarta Sans', ui-sans-serif, system-ui,
     -apple-system, BlinkMacSystemFont, sans-serif;
@@ -97,7 +102,7 @@ a {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(182, 95, 60, 0.3);
+  box-shadow: var(--btn-hover-shadow);
   background: var(--accent-dark);
 }
 
@@ -113,7 +118,7 @@ a {
   z-index: 10;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--header-bg);
   border-bottom: 1px solid var(--border);
 }
 
@@ -130,6 +135,12 @@ a {
   letter-spacing: -0.02em;
 }
 
+.site-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .site-nav {
   display: flex;
   gap: 1.5rem;
@@ -144,6 +155,32 @@ a {
 
 .site-nav a:hover {
   color: var(--ink);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.25rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.theme-toggle-label {
+  font-family: var(--font-mono);
 }
 
 /* hero */
@@ -205,7 +242,7 @@ a {
   aspect-ratio: 4 / 3;
   object-fit: contain;
   padding: clamp(1.25rem, 3vw, 2.5rem);
-  background: radial-gradient(circle at 50% 40%, #fff 0%, var(--bg) 100%);
+  background: var(--surface-glow);
 }
 
 .hero-figure figcaption {
@@ -245,7 +282,7 @@ a {
 
 .search-input:focus {
   outline: none;
-  border-color: rgba(182, 95, 60, 0.4);
+  border-color: var(--focus-ring-border);
   box-shadow: 0 0 0 4px var(--accent-light), var(--shadow);
 }
 
@@ -444,7 +481,7 @@ a {
 
 .sort-select:focus {
   outline: none;
-  border-color: rgba(182, 95, 60, 0.4);
+  border-color: var(--focus-ring-border);
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 
@@ -564,7 +601,7 @@ a {
   aspect-ratio: 4 / 3;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at 50% 40%, #fff 0%, var(--bg) 100%);
+  background: var(--surface-glow);
   border-bottom: 1px solid var(--border);
 }
 
@@ -880,9 +917,10 @@ a {
 
 /* dark mode */
 
+/* dark tokens apply on OS preference, unless the toggle picked light explicitly */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f0e0c;
+  :root:not([data-theme='light']) {
+      --bg: #0f0e0c;
     --surface: #181715;
     --ink: #f4f3ef;
     --muted: #a8a49a;
@@ -891,31 +929,28 @@ a {
     --accent-light: rgba(214, 123, 85, 0.14);
     --border: rgba(244, 243, 239, 0.1);
     --shadow-rgb: 0, 0, 0;
+    --header-bg: rgba(15, 14, 12, 0.72);
+    --surface-glow: radial-gradient(circle at 50% 40%, #1f1d1a 0%, var(--bg) 100%);
+    --btn-hover-shadow: 0 12px 32px rgba(214, 123, 85, 0.25);
+    --focus-ring-border: rgba(214, 123, 85, 0.5);
   }
+}
 
-  ::selection {
-    background: var(--accent-light);
-    color: var(--accent-dark);
-  }
-
-  .site-header {
-    background: rgba(15, 14, 12, 0.72);
-  }
-
-  .search-input:focus,
-  .sort-select:focus {
-    border-color: rgba(214, 123, 85, 0.5);
-    box-shadow: 0 0 0 4px var(--accent-light), var(--shadow);
-  }
-
-  .hero-figure img,
-  .entry-visual {
-    background: radial-gradient(circle at 50% 40%, #1f1d1a 0%, var(--bg) 100%);
-  }
-
-  .btn-primary:hover {
-    box-shadow: 0 12px 32px rgba(214, 123, 85, 0.25);
-  }
+/* the toggle can also force dark while the OS prefers light */
+:root[data-theme='dark'] {
+      --bg: #0f0e0c;
+    --surface: #181715;
+    --ink: #f4f3ef;
+    --muted: #a8a49a;
+    --accent: #d67b55;
+    --accent-dark: #e89772;
+    --accent-light: rgba(214, 123, 85, 0.14);
+    --border: rgba(244, 243, 239, 0.1);
+    --shadow-rgb: 0, 0, 0;
+    --header-bg: rgba(15, 14, 12, 0.72);
+    --surface-glow: radial-gradient(circle at 50% 40%, #1f1d1a 0%, var(--bg) 100%);
+    --btn-hover-shadow: 0 12px 32px rgba(214, 123, 85, 0.25);
+    --focus-ring-border: rgba(214, 123, 85, 0.5);
 }
 
 /* reduced motion */
