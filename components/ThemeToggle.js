@@ -33,7 +33,6 @@ export default function ThemeToggle() {
       onClick={cycle}
       aria-label={`Theme: ${labels[theme] || "System"}. Click to change.`}
     >
-      {theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🌓"}
       <span className="theme-toggle-label">{labels[theme] || "System"}</span>
     </button>
   );

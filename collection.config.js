@@ -18,9 +18,9 @@ const collection = {
   curator: "Saifudine Lim",
 
   // Where does your knowledge come from? A person, a place, a community.
-  source: "Told by family, by name",
+  source: "Everyday Cambodian households items",
 
-  province: "Kampong Cham",
+  province: "Phnom penh",
 };
 
 export default collection;

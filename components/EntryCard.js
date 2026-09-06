@@ -1,11 +1,9 @@
 export default function EntryCard({ entry }) {
-  const attribution = [entry.contributor, entry.place]
-    .filter(Boolean)
-    .join(", ");
+  const attribution = [entry.contributor, entry.place].filter(Boolean).join(" · ");
 
   return (
     <article className="entry-card">
-      <div className="entry-visual">
+      <div className="entry-card-media">
         {entry.image ? (
           <img
             src={entry.image}
@@ -14,25 +12,26 @@ export default function EntryCard({ entry }) {
             decoding="async"
           />
         ) : (
-          <span className="entry-visual-placeholder">No image</span>
+          // No photo yet: show the Khmer name as the visual instead of an empty
+          // box. aria-hidden because the same text is already in the heading.
+          <span className="entry-card-glyph" lang="km" aria-hidden="true">
+            {entry.khmerName}
+          </span>
         )}
       </div>
-      <div className="entry-body">
+      <div className="entry-card-body">
         <h3 className="entry-khmer" lang="km">
           {entry.khmerName}
         </h3>
         <p className="entry-names">
           {entry.romanization} · {entry.englishName}
         </p>
-        <p className="entry-story">
-          {entry.description || "No description recorded yet."}
-        </p>
-        <div className="entry-footer">
-          {attribution ? <span>{attribution}</span> : null}
-          {!entry.verified ? (
-            <span className="entry-unverified">Spelling unconfirmed</span>
-          ) : null}
-        </div>
+        <p className="entry-story">{entry.description || "No description recorded yet."}</p>
+        {attribution ? (
+          <p className="entry-source">
+            <span className="entry-source-pill">{attribution}</span>
+          </p>
+        ) : null}
       </div>
     </article>
   );
