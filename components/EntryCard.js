@@ -27,12 +27,18 @@ export default function EntryCard({ entry }) {
           {entry.romanization} · {entry.englishName}
         </p>
         <p className="entry-story">{entry.description || "No description recorded yet."}</p>
-        {attribution ? (
-          <p className="entry-source">
-            <span className="entry-source-pill">{attribution}</span>
-          </p>
-        ) : null}
+        <div className="entry-card-foot">
+          {attribution ? <span className="entry-source-pill">{attribution}</span> : <span />}
+          <span className="entry-card-cta" aria-hidden="true">
+            Read more →
+          </span>
+        </div>
       </div>
+      <a
+        className="entry-card-link"
+        href={`/entries/${entry.id}`}
+        aria-label={`Read more about ${entry.khmerName}, ${entry.englishName}`}
+      />
     </article>
   );
 }
