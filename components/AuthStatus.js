@@ -12,11 +12,21 @@ export default function AuthStatus() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
+    // createClient throws if the Supabase env vars are missing from the build.
+    // This component sits in the Header, so an unhandled throw here takes down
+    // every page in the archive. Treat it as "nobody is logged in" instead:
+    // browsing still works, and only the auth controls are affected.
+    try {
+      const supabase = createClient();
+      supabase.auth
+        .getUser()
+        .then(({ data }) => setUser(data.user))
+        .catch(() => setUser(null))
+        .finally(() => setReady(true));
+    } catch {
+      setUser(null);
       setReady(true);
-    });
+    }
   }, []);
 
   async function onLogout() {
