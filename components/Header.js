@@ -1,5 +1,7 @@
 import collection from "../collection.config.js";
 import ThemeToggle from "./ThemeToggle.js";
+import LanguageToggle from "./LanguageToggle.js";
+import AuthStatus from "./AuthStatus.js";
 
 export default function Header() {
   return (
@@ -13,7 +15,9 @@ export default function Header() {
             <a href="#archive">Archive</a>
             <a href="#about">About</a>
           </nav>
+          <LanguageToggle />
           <ThemeToggle />
+          <AuthStatus />
         </div>
       </div>
     </header>
