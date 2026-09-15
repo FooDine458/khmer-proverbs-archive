@@ -1019,27 +1019,7 @@ body {
 
 /* dark mode */
 
-/* dark tokens apply on OS preference, unless the toggle picked light explicitly */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --paper: #131315;
-    --surface: #1a1b1e;
-    --ink: #f1f1ef;
-    --muted: #999ba1;
-    --accent: #8b9bd6;
-    --accent-strong: #b7c0e6;
-    --accent-tint: rgba(139, 155, 214, 0.14);
-    --border: rgba(241, 241, 239, 0.14);
-    --shadow-rgb: 0, 0, 0;
-    --header-bg: var(--paper);
-    --focus-ring: rgba(139, 155, 214, 0.45);
-    --shadow-raised: 7px 7px 16px rgba(0, 0, 0, 0.55), -6px -6px 14px rgba(255, 255, 255, 0.035);
-    --shadow-raised-strong: 12px 12px 26px rgba(0, 0, 0, 0.6), -9px -9px 20px rgba(255, 255, 255, 0.045);
-    --shadow-inset: inset 4px 4px 9px rgba(0, 0, 0, 0.5), inset -4px -4px 9px rgba(255, 255, 255, 0.03);
-  }
-}
-
-/* the toggle can also force dark while the OS prefers light */
+/* dark is an explicit choice via the toggle; light is the default */
 :root[data-theme='dark'] {
   --paper: #131315;
   --surface: #1a1b1e;

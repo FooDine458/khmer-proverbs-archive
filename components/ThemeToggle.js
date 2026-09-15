@@ -5,35 +5,29 @@ import { useEffect, useState } from "react";
 const STORAGE_KEY = "theme";
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState(null);
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    setTheme(document.documentElement.getAttribute("data-theme") || "system");
+    setTheme(document.documentElement.getAttribute("data-theme") || "light");
   }, []);
 
-  const cycle = () => {
-    const order = ["system", "light", "dark"];
-    const next = order[(order.indexOf(theme) + 1) % order.length];
+  const toggle = () => {
+    const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    if (next === "system") {
-      document.documentElement.removeAttribute("data-theme");
-      window.localStorage.removeItem(STORAGE_KEY);
-    } else {
-      document.documentElement.setAttribute("data-theme", next);
-      window.localStorage.setItem(STORAGE_KEY, next);
-    }
+    document.documentElement.setAttribute("data-theme", next);
+    window.localStorage.setItem(STORAGE_KEY, next);
   };
 
-  const labels = { system: "System", light: "Light", dark: "Dark" };
+  const label = theme === "dark" ? "Dark" : "Light";
 
   return (
     <button
       type="button"
       className="theme-toggle"
-      onClick={cycle}
-      aria-label={`Theme: ${labels[theme] || "System"}. Click to change.`}
+      onClick={toggle}
+      aria-label={`Theme: ${label}. Click to change.`}
     >
-      <span className="theme-toggle-label">{labels[theme] || "System"}</span>
+      <span className="theme-toggle-label">{label}</span>
     </button>
   );
 }

@@ -20,8 +20,8 @@ export const metadata = {
   description: collection.description,
 };
 
-// Runs before hydration so an explicit theme choice applies on first paint,
-// instead of flashing the OS-preference theme and then swapping.
+// Runs before hydration so a saved light/dark choice applies on first paint,
+// instead of flashing the default theme and then swapping.
 const THEME_BOOTSTRAP = `
 try {
   var t = window.localStorage.getItem("theme");
