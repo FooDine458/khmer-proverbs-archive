@@ -1,3 +1,5 @@
+import DeleteEntryButton from "./DeleteEntryButton.js";
+
 export default function EntryDetail({ entry }) {
   const attribution = [entry.contributor, entry.place].filter(Boolean).join(" · ");
   const story = entry.story && entry.story.length ? entry.story : [entry.description];
@@ -30,6 +32,9 @@ export default function EntryDetail({ entry }) {
               {entry.romanization} · {entry.englishName}
             </p>
             {attribution ? <span className="entry-source-pill">{attribution}</span> : null}
+            {entry.contributorId ? (
+              <DeleteEntryButton entryId={entry.id} ownerId={entry.contributorId} />
+            ) : null}
           </div>
         </div>
         <div className="entry-detail-story">
