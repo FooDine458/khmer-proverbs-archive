@@ -56,7 +56,8 @@ export default function AuthForm({ mode }) {
     } else {
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) {
-        setError(error.message);
+        console.error("Sign-up failed:", error);
+        setError("Couldn't create the account. Check your email, try a longer password, and try again.");
         setLoading(false);
         return;
       }
