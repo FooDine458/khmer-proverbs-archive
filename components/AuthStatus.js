@@ -40,7 +40,7 @@ export default function AuthStatus() {
   if (user) {
     return (
       <>
-        <a href="/entries/new" className="header-new-entry-link">
+        <a href="/contribute" className="header-new-entry-link">
           + New entry
         </a>
         <span className="header-email">{user.email}</span>

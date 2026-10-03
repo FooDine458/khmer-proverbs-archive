@@ -1,16 +1,42 @@
-import DeleteEntryButton from "./DeleteEntryButton.js";
+import OwnerActions from "./OwnerActions.js";
+import ProvenanceTable from "./ProvenanceTable.js";
+import EntryNav from "./EntryNav.js";
 
-export default function EntryDetail({ entry }) {
-  const attribution = [entry.contributor, entry.place].filter(Boolean).join(" · ");
-  const story = entry.story && entry.story.length ? entry.story : [entry.description];
+// Lead is the short catalogue description; story is the longer narrative.
+// Combined so both render, description first, matching the design's split
+// between a bold opening line and the paragraphs that follow it.
+function storyParagraphs(entry) {
+  const rest = entry.story && entry.story.length ? entry.story : [];
+  return entry.description ? [entry.description, ...rest] : rest.length ? rest : ["No description recorded yet."];
+}
+
+export default function EntryDetail({ entry, collection, total, prev, next }) {
+  const paragraphs = storyParagraphs(entry);
 
   return (
     <article className="entry-detail">
       <div className="container entry-detail-inner">
-        <a href="/" className="back-link">
-          ← Back to the collection
-        </a>
+        <div className="entry-detail-breadcrumb">
+          <a href="/" className="back-link">
+            Collection
+          </a>
+          <span>/</span>
+          <span>
+            No. {String(entry.number).padStart(2, "0")} of {String(total).padStart(2, "0")}
+          </span>
+        </div>
         <div className="entry-detail-grid">
+          <div className="entry-detail-head">
+            <h1 className="entry-detail-khmer" lang="km">
+              {entry.khmerName}
+            </h1>
+            <p className="entry-detail-names">
+              <em>{entry.romanization}</em>, {entry.englishName}
+            </p>
+            {entry.contributorId ? (
+              <OwnerActions entryId={entry.id} ownerId={entry.contributorId} />
+            ) : null}
+          </div>
           <div className="entry-detail-media">
             {entry.image ? (
               <img
@@ -24,37 +50,33 @@ export default function EntryDetail({ entry }) {
               </span>
             )}
           </div>
-          <div className="entry-detail-head">
-            <h1 className="entry-detail-khmer" lang="km">
-              {entry.khmerName}
-            </h1>
-            <p className="entry-names">
-              {entry.romanization} · {entry.englishName}
-            </p>
-            {attribution ? <span className="entry-source-pill">{attribution}</span> : null}
-            {entry.contributorId ? (
-              <DeleteEntryButton entryId={entry.id} ownerId={entry.contributorId} />
+        </div>
+        <div className="entry-detail-main">
+          <div className="entry-detail-story">
+            {paragraphs.map((paragraph, i) => (
+              <p key={i} className={i === 0 ? "entry-detail-lead" : undefined}>
+                {paragraph}
+              </p>
+            ))}
+            {entry.sources && entry.sources.length ? (
+              <p className="entry-detail-sources">
+                Source:{" "}
+                {entry.sources.map((source, i) => (
+                  <span key={source.url}>
+                    <a href={source.url} target="_blank" rel="noreferrer">
+                      {source.label}
+                    </a>
+                    {i < entry.sources.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </p>
             ) : null}
           </div>
+          <ProvenanceTable entry={entry} collection={collection} />
         </div>
-        <div className="entry-detail-story">
-          {story.map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
-          {entry.sources && entry.sources.length ? (
-            <p className="entry-detail-sources">
-              Source:{" "}
-              {entry.sources.map((source, i) => (
-                <span key={source.url}>
-                  <a href={source.url} target="_blank" rel="noreferrer">
-                    {source.label}
-                  </a>
-                  {i < entry.sources.length - 1 ? ", " : ""}
-                </span>
-              ))}
-            </p>
-          ) : null}
-        </div>
+      </div>
+      <div className="container">
+        <EntryNav prev={prev} next={next} />
       </div>
     </article>
   );

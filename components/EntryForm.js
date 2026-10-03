@@ -2,149 +2,85 @@
 
 import { useState } from "react";
 import { createClient } from "../utils/supabase/client";
+import { PROVINCES, cleanEntry, validateEntry, validatePhotoFile } from "../lib/entryRules.js";
+import { saveEntry } from "../lib/saveEntry.js";
+import FormField from "./FormField.js";
 
-export default function EntryForm() {
+// Add form, or edit form when `entry` is passed (pre-filled; photo optional).
+export default function EntryForm({ entry }) {
   const [form, setForm] = useState({
-    khmerName: "",
-    romanization: "",
-    englishName: "",
-    description: "",
-    place: "",
-    imageUrl: "",
+    khmerName: entry?.khmerName || "",
+    romanization: entry?.romanization || "",
+    englishName: entry?.englishName || "",
+    place: entry?.place || "",
+    source: entry?.contributor || "",
+    link: entry?.sources?.[0]?.url || "",
+    description: entry?.description || "",
   });
-  const [error, setError] = useState("");
+  const [file, setFile] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
 
-  function onChange(field) {
-    return (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
-  }
+  const bind = (name) => ({
+    id: `entry-${name}`,
+    value: form[name],
+    error: errors[name],
+    onChange: (e) => setForm((f) => ({ ...f, [name]: e.target.value })),
+  });
 
   async function onSubmit(event) {
     event.preventDefault();
-    setError("");
+    setMessage("");
+    const values = cleanEntry(form);
+    const found = validateEntry(values);
+    const photoError = file || !entry ? validatePhotoFile(file) : "";
+    if (photoError) found.photo = photoError;
+    setErrors(found);
+    if (Object.keys(found).length > 0) return;
+
     setSaving(true);
-
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      window.location.href = "/login";
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from("entries")
-      .insert({
-        contributor_id: user.id,
-        contributor_email: user.email,
-        khmer_name: form.khmerName,
-        romanization: form.romanization || null,
-        english_name: form.englishName,
-        description: form.description,
-        place: form.place || null,
-        image_url: form.imageUrl || null,
-      })
-      .select("id")
-      .single();
-
-    if (error) {
-      setError("Couldn't save this entry. Check the required fields and try again.");
+    try {
+      const supabase = createClient();
+      const { data } = await supabase.auth.getUser();
+      if (!data.user) {
+        window.location.href = "/login";
+        return;
+      }
+      const id = await saveEntry(supabase, { user: data.user, values, file, entry });
+      window.location.href = `/entries/${id}`;
+    } catch (err) {
+      console.error("Saving entry failed:", err);
+      setMessage(entry ? "That change wasn't saved. Please try again." : "Couldn't save this entry. Check your connection and try again.");
       setSaving(false);
-      return;
     }
-
-    window.location.href = `/entries/${data.id}`;
   }
 
   return (
     <section className="auth">
       <div className="container">
         <div className="auth-card">
-          <span className="eyebrow">Add to the archive</span>
-          <h1 className="auth-title">New entry</h1>
-          <p className="auth-lead">Share a household item and its story.</p>
-          <form className="auth-form" onSubmit={onSubmit}>
-            <div className="auth-field">
-              <label className="auth-label" htmlFor="entry-khmer">
-                Khmer name
-              </label>
-              <input
-                id="entry-khmer"
-                className="auth-input"
-                lang="km"
-                value={form.khmerName}
-                onChange={onChange("khmerName")}
-                required
-              />
-            </div>
-            <div className="auth-field">
-              <label className="auth-label" htmlFor="entry-romanization">
-                Romanization
-              </label>
-              <input
-                id="entry-romanization"
-                className="auth-input"
-                value={form.romanization}
-                onChange={onChange("romanization")}
-              />
-            </div>
-            <div className="auth-field">
-              <label className="auth-label" htmlFor="entry-english">
-                English name
-              </label>
-              <input
-                id="entry-english"
-                className="auth-input"
-                value={form.englishName}
-                onChange={onChange("englishName")}
-                required
-              />
-            </div>
-            <div className="auth-field">
-              <label className="auth-label" htmlFor="entry-description">
-                Description
-              </label>
-              <textarea
-                id="entry-description"
-                className="auth-input"
-                value={form.description}
-                onChange={onChange("description")}
-                required
-              />
-            </div>
-            <div className="auth-field">
-              <label className="auth-label" htmlFor="entry-place">
-                Place
-              </label>
-              <input
-                id="entry-place"
-                className="auth-input"
-                value={form.place}
-                onChange={onChange("place")}
-                placeholder="Optional"
-              />
-            </div>
-            <div className="auth-field">
-              <label className="auth-label" htmlFor="entry-image">
-                Image URL
-              </label>
-              <input
-                id="entry-image"
-                className="auth-input"
-                type="url"
-                value={form.imageUrl}
-                onChange={onChange("imageUrl")}
-                placeholder="Optional"
-              />
-            </div>
-            {error ? (
-              <p className="auth-error" role="alert">
-                {error}
-              </p>
-            ) : null}
+          <span className="eyebrow">{entry ? "Edit entry" : "Add to the archive"}</span>
+          <h1 className="auth-title">{entry ? "Edit entry" : "New entry"}</h1>
+          <form className="auth-form" onSubmit={onSubmit} noValidate>
+            <FormField {...bind("khmerName")} label="Khmer name" lang="km" />
+            <FormField {...bind("romanization")} label="Romanization (optional)" />
+            <FormField {...bind("englishName")} label="English name" />
+            <FormField {...bind("place")} label="Province" as="select" options={PROVINCES} />
+            <FormField {...bind("source")} label="Source (who in your family told you)" />
+            <FormField {...bind("link")} label="Link (optional)" type="url" />
+            <FormField {...bind("description")} label="Description" as="textarea" />
+            <FormField
+              id="entry-photo"
+              label={entry ? "Replace photo (optional)" : "Photo"}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              error={errors.photo}
+              onChange={(e) => setFile(e.target.files[0] || null)}
+            />
+            {message ? <p className="auth-error" role="alert">{message}</p> : null}
             <button className="btn-primary" type="submit" disabled={saving}>
-              {saving ? "Saving…" : "Add entry"}
+              {saving ? "Saving…" : entry ? "Save changes" : "Add entry"}
             </button>
           </form>
         </div>

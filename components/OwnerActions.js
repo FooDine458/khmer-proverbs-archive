@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { createClient } from "../utils/supabase/client";
 
-// Shown only to the contributor who owns this entry. RLS on the `entries`
-// table enforces the same rule server-side, so this is a UI convenience,
-// not the security boundary.
-export default function DeleteEntryButton({ entryId, ownerId }) {
+// Edit and Delete, shown only to the contributor who owns this entry. Hiding
+// them is a courtesy: the row-level security policies on `entries` are what
+// actually refuse anyone else, quietly changing zero rows. So after the
+// delete we check that a row really came back.
+export default function OwnerActions({ entryId, ownerId }) {
   const [isOwner, setIsOwner] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
 
@@ -27,24 +29,42 @@ export default function DeleteEntryButton({ entryId, ownerId }) {
   if (!isOwner) return null;
 
   async function onDelete() {
-    if (!window.confirm("Delete this entry? This can't be undone.")) return;
     setDeleting(true);
     setError("");
-    const supabase = createClient();
-    const { error } = await supabase.from("entries").delete().eq("id", entryId);
-    if (error) {
-      setError("Couldn't delete this entry. Try again.");
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.from("entries").delete().eq("id", entryId).select("id");
+      if (error) throw error;
+      if (!data || data.length === 0) throw new Error("No row came back: the delete was not saved");
+      window.location.href = "/";
+    } catch (err) {
+      console.error("Deleting entry failed:", err);
+      setError("That change wasn't saved.");
       setDeleting(false);
-      return;
+      setConfirming(false);
     }
-    window.location.href = "/";
   }
 
   return (
     <div className="entry-owner-actions">
-      <button type="button" className="btn-delete" onClick={onDelete} disabled={deleting}>
-        {deleting ? "Deleting…" : "Delete this entry"}
-      </button>
+      {confirming ? (
+        <p>
+          Delete this entry? This can't be undone.{" "}
+          <button type="button" className="btn-delete" onClick={onDelete} disabled={deleting}>
+            {deleting ? "Deleting…" : "Yes, delete"}
+          </button>{" "}
+          <button type="button" className="btn-delete" onClick={() => setConfirming(false)} disabled={deleting}>
+            Cancel
+          </button>
+        </p>
+      ) : (
+        <p>
+          <a href={`/entries/${entryId}/edit`} className="btn-delete">Edit</a>{" "}
+          <button type="button" className="btn-delete" onClick={() => setConfirming(true)}>
+            Delete
+          </button>
+        </p>
+      )}
       {error ? (
         <p className="auth-error" role="alert">
           {error}
