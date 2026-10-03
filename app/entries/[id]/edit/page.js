@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "../../../../utils/supabase/server.js";
 import collection from "../../../../collection.config.js";
-import { getAllEntries } from "../../../../lib/entries.js";
+import { getEntryById } from "../../../../lib/entries.js";
 import Header from "../../../../components/Header.js";
 import Footer from "../../../../components/Footer.js";
 import EntryForm from "../../../../components/EntryForm.js";
@@ -20,7 +20,7 @@ export default async function EditEntryPage({ params }) {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const entry = (await getAllEntries()).find((e) => String(e.id) === id);
+  const entry = await getEntryById(id);
   if (!entry) notFound();
   if (entry.contributorId !== user.id) redirect(`/entries/${id}`);
 

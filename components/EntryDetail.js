@@ -22,7 +22,11 @@ export default function EntryDetail({ entry, collection, total, prev, next }) {
           </a>
           <span>/</span>
           <span>
-            No. {String(entry.number).padStart(2, "0")} of {String(total).padStart(2, "0")}
+            {entry.status === "published"
+              ? `No. ${String(entry.number).padStart(2, "0")} of ${String(total).padStart(2, "0")}`
+              : entry.status === "pending"
+                ? "Pending approval, not yet public"
+                : "Not approved, not public"}
           </span>
         </div>
         <div className="entry-detail-grid">

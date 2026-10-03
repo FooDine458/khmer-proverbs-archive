@@ -10,6 +10,7 @@ import { createClient } from "../utils/supabase/client";
 export default function AuthStatus() {
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // createClient throws if the Supabase env vars are missing from the build.
@@ -20,7 +21,13 @@ export default function AuthStatus() {
       const supabase = createClient();
       supabase.auth
         .getUser()
-        .then(({ data }) => setUser(data.user))
+        .then(async ({ data }) => {
+          setUser(data.user);
+          if (data.user) {
+            const { data: admin } = await supabase.rpc("is_admin");
+            setIsAdmin(admin === true);
+          }
+        })
         .catch(() => setUser(null))
         .finally(() => setReady(true));
     } catch {
@@ -43,6 +50,11 @@ export default function AuthStatus() {
         <a href="/contribute" className="header-new-entry-link">
           + New entry
         </a>
+        {isAdmin ? (
+          <a href="/admin" className="header-new-entry-link">
+            Review
+          </a>
+        ) : null}
         <span className="header-email">{user.email}</span>
         <button type="button" className="theme-toggle" onClick={onLogout}>
           <span className="theme-toggle-label">Log out</span>
