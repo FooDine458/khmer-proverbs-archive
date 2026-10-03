@@ -4,11 +4,9 @@ import { useMemo, useState } from "react";
 import EntryCard from "./EntryCard.js";
 import SearchBar from "./SearchBar.js";
 import FilterTag from "./FilterTag.js";
+import { isGeneralHistory } from "../lib/catalogue.js";
 
 const SEARCH_FIELDS = ["khmerName", "romanization", "englishName", "description"];
-// Entries with this contributor are researched general history; everything
-// else (e.g. "Grandmother") is a personal, family-sourced account.
-const GENERAL_CONTRIBUTOR = "Common in Khmer households";
 
 const SOURCE_CHIPS = [
   { value: "all", label: "All sources" },
@@ -26,8 +24,7 @@ export default function ArchiveExplorer({ entries }) {
     const list = entries.filter((entry) => {
       const matchesQuery =
         !q || SEARCH_FIELDS.some((f) => entry[f] && entry[f].toLowerCase().includes(q));
-      const isGeneral = entry.contributor === GENERAL_CONTRIBUTOR;
-      const okSource = source === "all" || (source === "general") === isGeneral;
+      const okSource = source === "all" || (source === "general") === isGeneralHistory(entry);
       return matchesQuery && okSource;
     });
     const byName = (a, b) => a.englishName.localeCompare(b.englishName, "en", { sensitivity: "base" });

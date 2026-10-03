@@ -1,14 +1,23 @@
-import { Plus_Jakarta_Sans, Noto_Sans_Khmer } from "next/font/google";
+import { Newsreader, Schibsted_Grotesk, Noto_Serif_Khmer } from "next/font/google";
 import "./globals.css";
 import collection from "../collection.config.js";
 
-const latin = Plus_Jakarta_Sans({
+const serif = Newsreader({
   subsets: ["latin"],
-  variable: "--nf-latin",
+  weight: ["300", "400"],
+  style: ["normal", "italic"],
+  variable: "--nf-serif",
   display: "swap",
 });
 
-const khmer = Noto_Sans_Khmer({
+const grotesk = Schibsted_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--nf-grotesk",
+  display: "swap",
+});
+
+const khmer = Noto_Serif_Khmer({
   subsets: ["khmer"],
   weight: ["400", "500", "700"],
   variable: "--nf-khmer",
@@ -33,7 +42,11 @@ try {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${latin.variable} ${khmer.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${serif.variable} ${grotesk.variable} ${khmer.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
         {children}

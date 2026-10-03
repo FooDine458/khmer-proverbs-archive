@@ -12,8 +12,7 @@ export default function Header() {
         </a>
         <div className="site-header-right">
           <nav className="site-nav" aria-label="Primary">
-            <a href="#archive">Archive</a>
-            <a href="#about">About</a>
+            <a href="#archive">Collection</a>
           </nav>
           <LanguageToggle />
           <ThemeToggle />

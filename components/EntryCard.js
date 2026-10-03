@@ -1,5 +1,6 @@
 export default function EntryCard({ entry }) {
-  const attribution = [entry.contributor, entry.place].filter(Boolean).join(" · ");
+  const attribution = [entry.contributor, entry.place].filter(Boolean).join(", ");
+  const categoryLabel = entry.category === "general" ? "General history" : "Personal story";
 
   return (
     <article className="entry-card">
@@ -19,20 +20,21 @@ export default function EntryCard({ entry }) {
           </span>
         )}
       </div>
+      <div className="entry-card-eyebrow">
+        <span className="metadata">NO. {String(entry.number).padStart(2, "0")}</span>
+        <span className={`metadata entry-card-category category-${entry.category}`}>
+          {categoryLabel}
+        </span>
+      </div>
       <div className="entry-card-body">
         <h3 className="entry-khmer" lang="km">
           {entry.khmerName}
         </h3>
         <p className="entry-names">
-          {entry.romanization} · {entry.englishName}
+          <em>{entry.romanization}</em>, {entry.englishName}
         </p>
         <p className="entry-story">{entry.description || "No description recorded yet."}</p>
-        <div className="entry-card-foot">
-          {attribution ? <span className="entry-source-pill">{attribution}</span> : <span />}
-          <span className="entry-card-cta" aria-hidden="true">
-            Read more →
-          </span>
-        </div>
+        {attribution ? <p className="entry-attribution">{attribution}</p> : null}
       </div>
       <a
         className="entry-card-link"

@@ -1,4 +1,6 @@
-export default function Hero({ collection, featured }) {
+import HeroFigure from "./HeroFigure.js";
+
+export default function Hero({ collection, entries }) {
   return (
     <section className="hero">
       <div className="container">
@@ -11,20 +13,10 @@ export default function Hero({ collection, featured }) {
               Collected by {collection.curator} in {collection.province}.
             </p>
             <a href="#archive" className="btn-primary">
-              Browse objects
+              Browse the objects
             </a>
           </div>
-          {featured?.image ? (
-            <figure className="hero-figure">
-              <img
-                src={featured.image}
-                alt={featured.imageAlt || featured.englishName}
-              />
-              <figcaption>
-                {featured.khmerName} · {featured.englishName}
-              </figcaption>
-            </figure>
-          ) : null}
+          <HeroFigure entries={entries} />
         </div>
       </div>
     </section>
