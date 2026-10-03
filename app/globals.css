@@ -247,6 +247,9 @@ a {
 /* google translate widget: keep it invisible, we drive it with our own button */
 
 .goog-te-banner-frame.skiptranslate,
+iframe.skiptranslate,
+body > .skiptranslate,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
 #goog-gt-tt,
 .goog-te-balloon-frame {
   display: none !important;
