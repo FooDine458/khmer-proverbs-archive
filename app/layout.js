@@ -1,4 +1,5 @@
 import { Newsreader, Schibsted_Grotesk, Noto_Serif_Khmer } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import collection from "../collection.config.js";
 
@@ -48,7 +49,9 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <body>
-        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
+        <Script id="theme-bootstrap" strategy="beforeInteractive">
+          {THEME_BOOTSTRAP}
+        </Script>
         {children}
       </body>
     </html>

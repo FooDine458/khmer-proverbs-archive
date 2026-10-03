@@ -67,16 +67,16 @@ export default function EntryForm({ entry }) {
             {entry ? ", and an edited entry goes back for review" : ""}.
           </p>
           <form className="auth-form" onSubmit={onSubmit} noValidate>
-            <FormField {...bind("khmerName")} label="Khmer name" lang="km" />
+            <FormField {...bind("khmerName")} label="Khmer name (required)" lang="km" />
             <FormField {...bind("romanization")} label="Romanization (optional)" />
-            <FormField {...bind("englishName")} label="English name" />
-            <FormField {...bind("place")} label="Province" as="select" options={PROVINCES} />
-            <FormField {...bind("source")} label="Source (who in your family told you)" />
+            <FormField {...bind("englishName")} label="English name (required)" />
+            <FormField {...bind("place")} label="Province (required)" as="select" options={PROVINCES} />
+            <FormField {...bind("source")} label="Source, who in your family told you (required)" />
             <FormField {...bind("link")} label="Link (optional)" type="url" />
-            <FormField {...bind("description")} label="Description" as="textarea" />
+            <FormField {...bind("description")} label="Description, 2 to 5 sentences (required)" as="textarea" />
             <FormField
               id="entry-photo"
-              label={entry ? "Replace photo (optional)" : "Photo"}
+              label={entry ? "Replace photo (optional)" : "Photo, JPEG, PNG or WebP, up to 5 MB (required)"}
               type="file"
               accept="image/jpeg,image/png,image/webp"
               error={errors.photo}
