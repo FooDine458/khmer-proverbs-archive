@@ -16,7 +16,7 @@ export default function EntryIndex({ entries }) {
           <EntryRow key={entry.id} entry={entry} index={i} onActivate={setActiveId} />
         ))}
       </ul>
-      <IndexPreview entry={shown} />
+      <IndexPreview entry={shown} named={activeId !== null} />
     </div>
   );
 }
