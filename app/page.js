@@ -12,7 +12,7 @@ export default async function Home() {
     <>
       <Header />
       <main>
-        <Hero collection={collection} entries={entries} />
+        <Hero collection={collection} />
         <ArchiveExplorer entries={entries} />
       </main>
       <Footer />

@@ -1,18 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import EntryCard from "./EntryCard.js";
 import SearchBar from "./SearchBar.js";
-import FilterTag from "./FilterTag.js";
+import ControlBar from "./ControlBar.js";
+import EntryIndex from "./EntryIndex.js";
 import { isGeneralHistory } from "../lib/catalogue.js";
 
 const SEARCH_FIELDS = ["khmerName", "romanization", "englishName", "description"];
-
-const SOURCE_CHIPS = [
-  { value: "all", label: "All sources" },
-  { value: "personal", label: "Personal stories" },
-  { value: "general", label: "General history" },
-];
 
 export default function ArchiveExplorer({ entries }) {
   const [query, setQuery] = useState("");
@@ -42,62 +36,19 @@ export default function ArchiveExplorer({ entries }) {
       <div className="container">
         <div className="section-head">
           <h2 className="section-title">The collection</h2>
-          <p className="section-meta">
-            {entries.length} objects in the archive
+          <p className="section-meta" aria-live="polite">
+            {results.length} of {entries.length} objects
           </p>
         </div>
         <SearchBar entries={entries} query={query} onQueryChange={setQuery} />
-        <div className="controls">
-          <div className="chips" role="group" aria-label="Filter by source">
-            {SOURCE_CHIPS.map((chip) => (
-              <button
-                key={chip.value}
-                type="button"
-                className="chip"
-                aria-pressed={source === chip.value}
-                onClick={() => setSource(chip.value)}
-              >
-                {chip.label}
-              </button>
-            ))}
-          </div>
-          <select
-            className="sort-select"
-            value={sort}
-            aria-label="Sort"
-            onChange={(e) => setSort(e.target.value)}
-          >
-            <option value="az">A–Z</option>
-            <option value="za">Z–A</option>
-          </select>
-        </div>
-        {query.trim() || source !== "all" ? (
-          <div className="tag-row">
-            {query.trim() ? (
-              <FilterTag label={`Search “${query.trim()}”`} onRemove={() => setQuery("")} />
-            ) : null}
-            {source !== "all" ? (
-              <FilterTag
-                label={SOURCE_CHIPS.find((c) => c.value === source).label}
-                onRemove={() => setSource("all")}
-              />
-            ) : null}
-            <button type="button" className="clear-all" onClick={clearAll}>
-              Clear all
-            </button>
-          </div>
-        ) : null}
-        <p className="result-count" aria-live="polite">
-          {results.length} object{results.length === 1 ? "" : "s"} found
-        </p>
+        <ControlBar
+          source={source}
+          onSourceChange={setSource}
+          sort={sort}
+          onSortChange={setSort}
+        />
         {results.length ? (
-          <div className="entry-list">
-            {results.map((entry, i) => (
-              <div key={entry.id} className="result-slot" style={{ "--i": i }}>
-                <EntryCard entry={entry} />
-              </div>
-            ))}
-          </div>
+          <EntryIndex entries={results} />
         ) : (
           <div className="empty">
             <p>
