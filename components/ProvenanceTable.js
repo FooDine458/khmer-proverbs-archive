@@ -3,21 +3,21 @@ export default function ProvenanceTable({ entry, collection }) {
   const rows = [
     ["Source", entry.contributor],
     ["Place", entry.place],
-    ["Category", categoryLabel, `category-${entry.category}`],
+    ["Category", categoryLabel],
     ["Collected by", [collection.curator, collection.province].filter(Boolean).join(", ")],
   ].filter(([, value]) => Boolean(value));
 
   return (
     <div className="provenance">
       <p className="metadata provenance-heading">Provenance</p>
-      {rows.map(([label, value, valueClass]) => (
-        <div className="provenance-row" key={label}>
-          <span className="provenance-label">{label}</span>
-          <span className={valueClass ? `provenance-value ${valueClass}` : "provenance-value"}>
-            {value}
-          </span>
-        </div>
-      ))}
+      <dl className="provenance-list">
+        {rows.map(([label, value]) => (
+          <div className="provenance-row" key={label}>
+            <dt className="provenance-label">{label}</dt>
+            <dd className="provenance-value">{value}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   );
 }

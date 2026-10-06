@@ -49,7 +49,7 @@ export default function EntryDetail({ entry, collection, total, prev, next }) {
                 decoding="async"
               />
             ) : (
-              <span className="entry-card-glyph" lang="km" aria-hidden="true">
+              <span className="entry-glyph" lang="km" aria-hidden="true">
                 {entry.khmerName}
               </span>
             )}
