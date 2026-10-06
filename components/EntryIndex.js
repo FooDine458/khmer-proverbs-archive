@@ -12,8 +12,8 @@ export default function EntryIndex({ entries }) {
   return (
     <div className="entry-index">
       <ul className="entry-list">
-        {entries.map((entry) => (
-          <EntryRow key={entry.id} entry={entry} onActivate={setActiveId} />
+        {entries.map((entry, i) => (
+          <EntryRow key={entry.id} entry={entry} index={i} onActivate={setActiveId} />
         ))}
       </ul>
       <IndexPreview entry={shown} />

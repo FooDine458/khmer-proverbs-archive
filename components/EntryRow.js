@@ -1,6 +1,8 @@
-export default function EntryRow({ entry, onActivate }) {
+import Reveal from "./Reveal.js";
+
+export default function EntryRow({ entry, index, onActivate }) {
   return (
-    <li className="entry-row">
+    <Reveal as="li" className="entry-row" index={index}>
       <a
         className="entry-row-link"
         href={`/entries/${entry.id}`}
@@ -21,6 +23,6 @@ export default function EntryRow({ entry, onActivate }) {
           <img className="entry-row-thumb" src={entry.image} alt="" loading="lazy" decoding="async" />
         ) : null}
       </a>
-    </li>
+    </Reveal>
   );
 }

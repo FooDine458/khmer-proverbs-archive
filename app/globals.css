@@ -558,7 +558,6 @@ body {
   line-height: 1.5;
   color: var(--ink);
   overflow-wrap: anywhere;
-  transition: color var(--dur) var(--ease);
 }
 
 .entry-row-link:hover .entry-row-khmer,
@@ -606,6 +605,64 @@ body {
   color: var(--muted);
   opacity: 0.55;
   animation: fade-in var(--dur) var(--ease) both;
+}
+
+/* motion */
+
+/* Rows only start hidden when scripting is on, so the list never depends on
+   JavaScript to be readable. */
+@media (scripting: enabled) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(var(--sp-16));
+    transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
+    transition-delay: calc(min(var(--i, 0), 6) * 60ms);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.entry-row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--clay);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-slow) var(--ease);
+}
+
+.entry-row:hover::after,
+.entry-row:focus-within::after {
+  transform: scaleX(1);
+}
+
+.entry-row-link {
+  transition: opacity var(--dur) var(--ease);
+}
+
+.entry-row-khmer {
+  transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.entry-list:focus-within .entry-row:not(:focus-within) .entry-row-link {
+  opacity: 0.4;
+}
+
+@media (hover: hover) {
+  .entry-row-link:hover .entry-row-khmer {
+    transform: translateX(var(--sp-8));
+  }
+
+  .entry-list:hover .entry-row:not(:hover) .entry-row-link {
+    opacity: 0.4;
+  }
 }
 
 /* stand-in visual on the entry page for entries with no photo yet;
@@ -1107,6 +1164,11 @@ textarea.auth-input {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 
   *,
