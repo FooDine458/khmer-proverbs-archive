@@ -4,7 +4,9 @@ import { useState } from "react";
 import { createClient } from "../utils/supabase/client";
 import { PROVINCES, cleanEntry, validateEntry, validatePhotoFile } from "../lib/entryRules.js";
 import { saveEntry } from "../lib/saveEntry.js";
+import { refreshPublicList } from "../lib/refreshPublicList.js";
 import FormField from "./FormField.js";
+import ReviewNotice from "./ReviewNotice.js";
 
 // Add form, or edit form when `entry` is passed (pre-filled; photo optional).
 export default function EntryForm({ entry }) {
@@ -48,6 +50,7 @@ export default function EntryForm({ entry }) {
         return;
       }
       const id = await saveEntry(supabase, { user: data.user, values, file, entry });
+      await refreshPublicList();
       window.location.href = `/entries/${id}`;
     } catch (err) {
       console.error("Saving entry failed:", err);
@@ -62,10 +65,7 @@ export default function EntryForm({ entry }) {
         <div className="auth-card">
           <span className="eyebrow">{entry ? "Edit entry" : "Add to the archive"}</span>
           <h1 className="auth-title">{entry ? "Edit entry" : "New entry"}</h1>
-          <p className="auth-lead">
-            An admin reviews every entry before it appears on the site
-            {entry ? ", and an edited entry goes back for review" : ""}.
-          </p>
+          <ReviewNotice entry={entry} />
           <form className="auth-form" onSubmit={onSubmit} noValidate>
             <FormField {...bind("khmerName")} label="Khmer name (required)" lang="km" />
             <FormField {...bind("romanization")} label="Romanization (optional)" />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "../utils/supabase/client";
+import { refreshPublicList } from "../lib/refreshPublicList.js";
 
 // One pending entry with Approve / Reject. Only an admin's session can change
 // `status` (row-level security), so we check that a row came back, same as
@@ -22,6 +23,7 @@ export default function ReviewCard({ entry }) {
         .select("id");
       if (error) throw error;
       if (!data || data.length === 0) throw new Error("No row came back: the review was not saved");
+      await refreshPublicList();
       window.location.reload();
     } catch (err) {
       console.error("Reviewing entry failed:", err);

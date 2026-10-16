@@ -6,7 +6,7 @@ What a contributor must do for an entry to count as valid in the Khmer Household
 
 | Rule | Valid | Invalid | Why it fails |
 |---|---|---|---|
-| Khmer name is written in Khmer script | ត្បាល់ | `Tbal`, empty | Not Khmer script, or missing |
+| Khmer name is written in Khmer script, with no Latin letters | ត្បាល់ | `Tbal`, `ត្បាល់ tbal`, empty | Not Khmer script, or missing |
 | English name is written in English | Stone mortar and pestle | `ត្បាល់`, empty | Not English, or missing |
 
 ## 2. Province

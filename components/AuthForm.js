@@ -57,7 +57,7 @@ export default function AuthForm({ mode }) {
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) {
         console.error("Sign-up failed:", error);
-        setError("Couldn't create the account. Check your email, try a longer password, and try again.");
+        setError("Couldn't create the account. Check your email, use a password of at least 8 characters, and try again.");
         setLoading(false);
         return;
       }
@@ -104,7 +104,8 @@ export default function AuthForm({ mode }) {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete={mode === "login" ? "current-password" : "new-password"}
                 required
-                minLength={6}
+                // Only new passwords must be 8+; old accounts may still have 6.
+                minLength={mode === "signup" ? 8 : undefined}
               />
             </div>
             {error ? (

@@ -2,6 +2,7 @@ import { Newsreader, Schibsted_Grotesk, Noto_Serif_Khmer } from "next/font/googl
 import Script from "next/script";
 import "./globals.css";
 import collection from "../collection.config.js";
+import { SITE_URL } from "../lib/siteUrl.js";
 
 const serif = Newsreader({
   subsets: ["latin"],
@@ -26,8 +27,17 @@ const khmer = Noto_Serif_Khmer({
 });
 
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: collection.name,
   description: collection.description,
+  // What shows when the link is pasted into Telegram, Facebook or Messenger.
+  openGraph: {
+    title: collection.name,
+    description: collection.description,
+    siteName: collection.name,
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 // Runs before hydration so a saved light/dark choice applies on first paint,

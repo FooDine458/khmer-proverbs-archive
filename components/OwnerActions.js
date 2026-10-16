@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "../utils/supabase/client";
+import { refreshPublicList } from "../lib/refreshPublicList.js";
 
 // Edit and Delete, shown only to the contributor who owns this entry. Hiding
 // them is a courtesy: the row-level security policies on `entries` are what
@@ -36,6 +37,7 @@ export default function OwnerActions({ entryId, ownerId }) {
       const { data, error } = await supabase.from("entries").delete().eq("id", entryId).select("id");
       if (error) throw error;
       if (!data || data.length === 0) throw new Error("No row came back: the delete was not saved");
+      await refreshPublicList();
       window.location.href = "/";
     } catch (err) {
       console.error("Deleting entry failed:", err);

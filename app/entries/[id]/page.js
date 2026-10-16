@@ -20,9 +20,15 @@ export async function generateMetadata({ params }) {
   const { id } = await params;
   const { entry } = await findEntry(id);
   if (!entry) return { title: collection.name };
+  const title = `${entry.englishName} · ${collection.name}`;
   return {
-    title: `${entry.englishName} · ${collection.name}`,
+    title,
     description: entry.description,
+    openGraph: {
+      title,
+      description: entry.description,
+      images: entry.image ? [{ url: entry.image, alt: entry.imageAlt }] : [],
+    },
   };
 }
 
@@ -39,8 +45,8 @@ export default async function EntryPage({ params }) {
           entry={entry}
           collection={collection}
           total={published.length}
-          prev={published[index - 1] || null}
-          next={published[index + 1] || null}
+          prev={index > 0 ? published[index - 1] : null}
+          next={index !== -1 ? published[index + 1] || null : null}
         />
       </main>
       <Footer />
