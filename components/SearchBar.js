@@ -102,11 +102,11 @@ export default function SearchBar({ entries, query, onQueryChange }) {
               }}
               onMouseEnter={() => setActive(i)}
             >
-              <span className="search-suggestion-khmer" lang="km">
+              <span className="search-suggestion-khmer" lang="km" translate="no">
                 {e.khmerName}
               </span>
               <span className="search-suggestion-sub">
-                {e.romanization} · {e.englishName}
+                <span translate="no">{e.romanization}</span> · {e.englishName}
               </span>
             </li>
           ))}

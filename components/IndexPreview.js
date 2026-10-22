@@ -10,7 +10,7 @@ export default function IndexPreview({ entry, named }) {
       {entry.image ? (
         <img key={entry.id} className={`index-preview-img${suffix}`} src={entry.image} alt="" decoding="async" />
       ) : (
-        <span key={entry.id} className={`index-preview-glyph${suffix}`} lang="km">
+        <span key={entry.id} className={`index-preview-glyph${suffix}`} lang="km" translate="no">
           {entry.khmerName}
         </span>
       )}

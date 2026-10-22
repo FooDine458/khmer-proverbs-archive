@@ -34,9 +34,9 @@ export default function ReviewCard({ entry }) {
 
   return (
     <article className="review-card">
-      <h2 lang="km">{entry.khmerName}</h2>
+      <h2 lang="km" translate="no">{entry.khmerName}</h2>
       <p>
-        <em>{entry.romanization}</em> {entry.englishName}, {entry.place}
+        <em translate="no">{entry.romanization}</em> {entry.englishName}, {entry.place}
       </p>
       <p>{entry.description}</p>
       <p className="metadata">Source: {entry.contributor}</p>

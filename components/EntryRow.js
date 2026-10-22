@@ -12,11 +12,11 @@ export default function EntryRow({ entry, index, onActivate }) {
         <span className="metadata entry-row-number">
           {String(entry.number).padStart(2, "0")}
         </span>
-        <span className="entry-row-khmer" lang="km">
+        <span className="entry-row-khmer" lang="km" translate="no">
           {entry.khmerName}
         </span>
         <span className="entry-row-names">
-          <em>{entry.romanization}</em>, {entry.englishName}
+          <em translate="no">{entry.romanization}</em>, {entry.englishName}
         </span>
         {entry.image ? (
           // Decorative: the name beside it already says what the object is.

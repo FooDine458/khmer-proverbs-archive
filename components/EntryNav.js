@@ -8,11 +8,11 @@ function navLink(entry, direction) {
       <span className="metadata">
         {word}, No. {String(entry.number).padStart(2, "0")}
       </span>
-      <span className="entry-nav-khmer" lang="km">
+      <span className="entry-nav-khmer" lang="km" translate="no">
         {entry.khmerName}
       </span>
       <span className="entry-nav-name">
-        <em>{entry.romanization}</em>, {entry.englishName}
+        <em translate="no">{entry.romanization}</em>, {entry.englishName}
       </span>
     </a>
   );

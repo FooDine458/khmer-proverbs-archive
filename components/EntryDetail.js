@@ -31,11 +31,11 @@ export default function EntryDetail({ entry, collection, total, prev, next }) {
         </div>
         <div className="entry-detail-grid">
           <div className="entry-detail-head">
-            <h1 className="entry-detail-khmer" lang="km">
+            <h1 className="entry-detail-khmer" lang="km" translate="no">
               {entry.khmerName}
             </h1>
             <p className="entry-detail-names">
-              <em>{entry.romanization}</em>, {entry.englishName}
+              <em translate="no">{entry.romanization}</em>, {entry.englishName}
             </p>
             {entry.contributorId ? (
               <OwnerActions entryId={entry.id} ownerId={entry.contributorId} />
@@ -49,7 +49,7 @@ export default function EntryDetail({ entry, collection, total, prev, next }) {
                 decoding="async"
               />
             ) : (
-              <span className="entry-glyph" lang="km" aria-hidden="true">
+              <span className="entry-glyph" lang="km" translate="no" aria-hidden="true">
                 {entry.khmerName}
               </span>
             )}
