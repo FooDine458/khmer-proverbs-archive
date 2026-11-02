@@ -4,9 +4,13 @@ import { useState } from "react";
 import { createClient } from "../utils/supabase/client";
 import { refreshPublicList } from "../lib/refreshPublicList.js";
 
-// One pending entry with Approve / Reject. Only an admin's session can change
-// `status` (row-level security), so we check that a row came back, same as
-// the owner's edit and delete: a refused update quietly changes zero rows.
+// One pending entry with Approve / Return for changes. "Return" is stored as
+// status "rejected"; the contributor can edit and resubmit it.
+//
+// The update only matches the version this page loaded (same id AND same
+// updated_at). If the contributor saved an edit after the page opened, the
+// database moved updated_at, zero rows change, and nothing unread goes public.
+// Zero rows is also how row-level security refuses a non-admin.
 export default function ReviewCard({ entry }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -20,9 +24,14 @@ export default function ReviewCard({ entry }) {
         .from("entries")
         .update({ status })
         .eq("id", entry.id)
+        .eq("updated_at", entry.updatedAt)
         .select("id");
       if (error) throw error;
-      if (!data || data.length === 0) throw new Error("No row came back: the review was not saved");
+      if (!data || data.length === 0) {
+        setError("This entry was edited after you opened this page, so nothing was saved. Reload to review the latest version.");
+        setBusy(false);
+        return;
+      }
       await refreshPublicList();
       window.location.reload();
     } catch (err) {
@@ -35,8 +44,8 @@ export default function ReviewCard({ entry }) {
   return (
     <article className="review-card">
       <h2 lang="km" translate="no">{entry.khmerName}</h2>
-      <p>
-        <em translate="no">{entry.romanization}</em> {entry.englishName}, {entry.place}
+      <p translate="no">
+        <em>{entry.romanization}</em> {entry.englishName}, {entry.place}
       </p>
       <p>{entry.description}</p>
       <p className="metadata">Source: {entry.contributor}</p>
@@ -49,7 +58,7 @@ export default function ReviewCard({ entry }) {
           Approve
         </button>{" "}
         <button type="button" className="btn-delete" disabled={busy} onClick={() => review("rejected")}>
-          Reject
+          Return for changes
         </button>
       </div>
       {error ? (
