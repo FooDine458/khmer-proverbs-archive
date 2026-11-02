@@ -11,8 +11,8 @@ function navLink(entry, direction) {
       <span className="entry-nav-khmer" lang="km" translate="no">
         {entry.khmerName}
       </span>
-      <span className="entry-nav-name">
-        <em translate="no">{entry.romanization}</em>, {entry.englishName}
+      <span className="entry-nav-name" translate="no">
+        <em>{entry.romanization}</em>, {entry.englishName}
       </span>
     </a>
   );

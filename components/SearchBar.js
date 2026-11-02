@@ -105,8 +105,8 @@ export default function SearchBar({ entries, query, onQueryChange }) {
               <span className="search-suggestion-khmer" lang="km" translate="no">
                 {e.khmerName}
               </span>
-              <span className="search-suggestion-sub">
-                <span translate="no">{e.romanization}</span> · {e.englishName}
+              <span className="search-suggestion-sub" translate="no">
+                {e.romanization} · {e.englishName}
               </span>
             </li>
           ))}

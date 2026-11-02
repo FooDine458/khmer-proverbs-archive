@@ -15,8 +15,8 @@ export default function EntryRow({ entry, index, onActivate }) {
         <span className="entry-row-khmer" lang="km" translate="no">
           {entry.khmerName}
         </span>
-        <span className="entry-row-names">
-          <em translate="no">{entry.romanization}</em>, {entry.englishName}
+        <span className="entry-row-names" translate="no">
+          <em>{entry.romanization}</em>, {entry.englishName}
         </span>
         {entry.image ? (
           // Decorative: the name beside it already says what the object is.

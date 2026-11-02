@@ -26,7 +26,7 @@ export default function EntryDetail({ entry, collection, total, prev, next }) {
               ? `No. ${String(entry.number).padStart(2, "0")} of ${String(total).padStart(2, "0")}`
               : entry.status === "pending"
                 ? "Pending approval, not yet public"
-                : "Not approved, not public"}
+                : "Returned for changes. Edit your entry to submit it again."}
           </span>
         </div>
         <div className="entry-detail-grid">
@@ -34,8 +34,8 @@ export default function EntryDetail({ entry, collection, total, prev, next }) {
             <h1 className="entry-detail-khmer" lang="km" translate="no">
               {entry.khmerName}
             </h1>
-            <p className="entry-detail-names">
-              <em translate="no">{entry.romanization}</em>, {entry.englishName}
+            <p className="entry-detail-names" translate="no">
+              <em>{entry.romanization}</em>, {entry.englishName}
             </p>
             {entry.contributorId ? (
               <OwnerActions entryId={entry.id} ownerId={entry.contributorId} />
