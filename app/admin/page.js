@@ -26,7 +26,11 @@ export default async function AdminPage() {
         <section className="auth">
           <div className="container">
             <h1 className="auth-title">Entries waiting for review</h1>
-            {pending.length === 0 ? (
+            {pending === null ? (
+              <p className="auth-error" role="alert">
+                The review queue couldn't be loaded. Refresh the page to try again.
+              </p>
+            ) : pending.length === 0 ? (
               <p className="auth-lead">Nothing is waiting. New submissions will show up here.</p>
             ) : (
               pending.map((entry) => <ReviewCard key={entry.id} entry={entry} />)
