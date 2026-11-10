@@ -591,9 +591,11 @@ body {
 }
 
 .index-preview-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   animation: fade-in var(--dur) var(--ease) both;
 }
 
@@ -760,8 +762,7 @@ body {
 
 .entry-detail-media {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  max-height: 75vh;
+  height: clamp(18rem, 65vh, 40rem);
   display: grid;
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   place-items: center;
@@ -770,9 +771,11 @@ body {
 }
 
 .entry-detail-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 /* stand-in visual for entries whose photo has not been taken yet */
@@ -1146,7 +1149,8 @@ textarea.auth-input {
     grid-area: thumb;
     width: 3.5rem;
     height: 3.5rem;
-    object-fit: cover;
+    object-fit: contain;
+    background: var(--surface);
     border-radius: var(--radius);
   }
 
