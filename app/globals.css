@@ -1200,6 +1200,17 @@ textarea.auth-input {
     display: none;
   }
 
+  /* Logged in, the header carries two links, the toggles and Log out. The
+     email is what pushed it wider than a phone, so it only shows on larger
+     screens. */
+  .header-email {
+    display: none;
+  }
+
+  .site-header-right {
+    gap: var(--sp-12);
+  }
+
   .entry-nav {
     grid-template-columns: 1fr;
   }
