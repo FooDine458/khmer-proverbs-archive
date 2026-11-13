@@ -28,7 +28,7 @@ export default function ReviewCard({ entry }) {
         .select("id");
       if (error) throw error;
       if (!data || data.length === 0) {
-        setError("This entry was edited after you opened this page, so nothing was saved. Reload to review the latest version.");
+        setError("This entry changed after you opened this page. It may have been edited, or already reviewed in another tab. Nothing was saved. Reload to see where it stands.");
         setBusy(false);
         return;
       }
