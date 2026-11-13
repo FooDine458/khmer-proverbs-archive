@@ -20,7 +20,7 @@ const collection = {
   // Where does your knowledge come from? A person, a place, a community.
   source: "Everyday Cambodian households items",
 
-  province: "Phnom penh",
+  province: "Phnom Penh",
 };
 
 export default collection;
