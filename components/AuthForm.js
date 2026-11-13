@@ -122,6 +122,11 @@ export default function AuthForm({ mode }) {
               {loading ? "Please wait…" : c.cta}
             </button>
           </form>
+          {mode === "login" ? (
+            <p className="auth-switch">
+              <a href="/forgot-password">Forgot your password?</a>
+            </p>
+          ) : null}
           <p className="auth-switch">
             {c.switchText}{" "}
             <a href={c.switchHref}>{c.switchLink}</a>
