@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "../utils/supabase/client";
 import { PROVINCES, cleanEntry, validateEntry, validatePhotoFile } from "../lib/entryRules.js";
 import { saveEntry } from "../lib/saveEntry.js";
@@ -23,6 +23,17 @@ export default function EntryForm({ entry }) {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Only changes what the page says and whether a save keeps the entry's
+  // status. The database decides what an admin may actually do.
+  useEffect(() => {
+    if (!entry) return;
+    createClient()
+      .rpc("is_admin")
+      .then(({ data }) => setIsAdmin(data === true))
+      .catch(() => setIsAdmin(false));
+  }, [entry]);
 
   const bind = (name) => ({
     id: `entry-${name}`,
@@ -49,7 +60,7 @@ export default function EntryForm({ entry }) {
         window.location.href = "/login";
         return;
       }
-      const id = await saveEntry(supabase, { user: data.user, values, file, entry });
+      const id = await saveEntry(supabase, { user: data.user, values, file, entry, keepStatus: isAdmin });
       await refreshPublicList();
       window.location.href = `/entries/${id}`;
     } catch (err) {
@@ -65,7 +76,7 @@ export default function EntryForm({ entry }) {
         <div className="auth-card">
           <span className="eyebrow">{entry ? "Edit entry" : "Add to the archive"}</span>
           <h1 className="auth-title">{entry ? "Edit entry" : "New entry"}</h1>
-          <ReviewNotice entry={entry} />
+          <ReviewNotice entry={entry} isAdmin={isAdmin} />
           <form className="auth-form" onSubmit={onSubmit} noValidate>
             <FormField {...bind("khmerName")} label="Khmer name (required)" lang="km" />
             <FormField {...bind("romanization")} label="Romanization (optional)" />
