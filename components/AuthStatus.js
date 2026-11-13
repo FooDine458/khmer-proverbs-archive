@@ -19,6 +19,15 @@ export default function AuthStatus() {
     // browsing still works, and only the auth controls are affected.
     try {
       const supabase = createClient();
+      // A reset link that Supabase sends to the wrong page (it falls back to
+      // the site root when the address isn't on its allow-list) still signs the
+      // person in and fires this event, so carry them on to where the new
+      // password gets chosen.
+      const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+        if (event === "PASSWORD_RECOVERY" && window.location.pathname !== "/reset-password") {
+          window.location.href = "/reset-password";
+        }
+      });
       supabase.auth
         .getUser()
         .then(async ({ data }) => {
@@ -30,6 +39,7 @@ export default function AuthStatus() {
         })
         .catch(() => setUser(null))
         .finally(() => setReady(true));
+      return () => listener.subscription.unsubscribe();
     } catch {
       setUser(null);
       setReady(true);
