@@ -50,6 +50,9 @@ export default function AuthStatus() {
         <a href="/contribute" className="header-new-entry-link">
           + New entry
         </a>
+        <a href="/my-entries" className="header-new-entry-link">
+          My entries
+        </a>
         {isAdmin ? (
           <a href="/admin" className="header-new-entry-link">
             Review

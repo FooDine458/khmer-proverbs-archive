@@ -1045,6 +1045,34 @@ textarea.auth-input {
   color: var(--muted);
 }
 
+.my-entries {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+
+.my-entries li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--surface);
+}
+
+.my-entries-khmer {
+  font-size: 1.25rem;
+}
+
+.my-entries-status {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.my-entries-rejected {
+  color: var(--clay);
+}
+
 .status-notice {
   margin: var(--sp-8) 0 1.5rem;
   padding: 0.75rem 1rem;

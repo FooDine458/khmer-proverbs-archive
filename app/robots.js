@@ -4,7 +4,7 @@ import { SITE_URL } from "../lib/siteUrl.js";
 // a login have nothing for a crawler to read.
 export default function robots() {
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/contribute", "/api/"] },
+    rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/contribute", "/my-entries", "/api/"] },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }
