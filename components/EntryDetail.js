@@ -1,6 +1,7 @@
 import OwnerActions from "./OwnerActions.js";
 import ProvenanceTable from "./ProvenanceTable.js";
 import EntryNav from "./EntryNav.js";
+import StatusNotice from "./StatusNotice.js";
 
 // Lead is the short catalogue description; story is the longer narrative.
 // Combined so both render, description first, matching the design's split
@@ -29,6 +30,7 @@ export default function EntryDetail({ entry, collection, total, prev, next }) {
                 : "Returned for changes. Edit your entry to submit it again."}
           </span>
         </div>
+        <StatusNotice status={entry.status} />
         <div className="entry-detail-grid">
           <div className="entry-detail-head">
             <h1 className="entry-detail-khmer" lang="km" translate="no">

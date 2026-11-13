@@ -1045,6 +1045,14 @@ textarea.auth-input {
   color: var(--muted);
 }
 
+.status-notice {
+  margin: var(--sp-8) 0 1.5rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--clay);
+  background: var(--clay-tint);
+  font-size: 0.9375rem;
+}
+
 .auth-switch {
   margin-top: var(--sp-4);
   font-size: 0.875rem;
