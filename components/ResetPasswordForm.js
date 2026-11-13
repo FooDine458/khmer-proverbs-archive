@@ -1,33 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "../utils/supabase/client";
 import FormField from "./FormField.js";
 
-// Opened from the link in the reset email. The link carries a one-time code;
-// swapping it for a session is what lets this page set a new password. It
-// only works in the browser that asked for the email, and only once.
+// Opened from the link in the reset email. The link carries a one-time code,
+// and the Supabase client spends it by itself as the page loads, signing the
+// person in. Spending it again here would fail, so this only waits for that
+// result. The link works once, and only in the browser that asked for it.
 export default function ResetPasswordForm() {
   const [state, setState] = useState("checking"); // checking, ready or expired
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
-  const started = useRef(false);
 
   useEffect(() => {
-    if (started.current) return; // the code works once, so don't spend it twice
-    started.current = true;
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (!code) return setState("expired");
+    let supabase;
     try {
-      createClient()
-        .auth.exchangeCodeForSession(code)
-        .then(({ error }) => setState(error ? "expired" : "ready"))
-        .catch(() => setState("expired"));
+      supabase = createClient();
     } catch {
       setState("expired");
+      return;
     }
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") setState("ready");
+    });
+    // getSession waits for the code exchange to finish, so no session after it
+    // means the link was bad, used already, or opened in another browser.
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => setState((s) => (s === "checking" ? (session ? "ready" : "expired") : s)))
+      .catch(() => setState("expired"));
+    return () => data.subscription.unsubscribe();
   }, []);
 
   async function onSubmit(event) {
