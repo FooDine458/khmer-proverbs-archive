@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { createClient } from "../../utils/supabase/server.js";
 import collection from "../../collection.config.js";
 import { getPendingEntries } from "../../lib/entries.js";
@@ -10,12 +9,29 @@ export const metadata = {
   title: `Review entries · ${collection.name}`,
 };
 
-// The redirect is a courtesy. Non-admins can't read pending rows or change
+// The message is a courtesy. Non-admins can't read pending rows or change
 // any status anyway: that's enforced by the row-level security policies.
 export default async function AdminPage() {
   const supabase = await createClient();
   const { data: isAdmin } = await supabase.rpc("is_admin");
-  if (!isAdmin) redirect("/");
+  if (!isAdmin) {
+    return (
+      <>
+        <Header />
+        <main>
+          <section className="auth">
+            <div className="container">
+              <h1 className="auth-title">Reviewers only</h1>
+              <p className="auth-lead">
+                This page is for the archive's reviewers. <a href="/">Back to the collection</a>.
+              </p>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   const pending = await getPendingEntries();
 
