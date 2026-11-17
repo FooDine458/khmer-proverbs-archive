@@ -1,21 +1,15 @@
-import { Newsreader, Schibsted_Grotesk, Noto_Serif_Khmer } from "next/font/google";
+import { Poppins, Noto_Serif_Khmer } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import collection from "../collection.config.js";
 import { SITE_URL } from "../lib/siteUrl.js";
 
-const serif = Newsreader({
+// Bold (700) is the default; regular (400) is for <p> text.
+const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400"],
+  weight: ["400", "700"],
   style: ["normal", "italic"],
-  variable: "--nf-serif",
-  display: "swap",
-});
-
-const grotesk = Schibsted_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--nf-grotesk",
+  variable: "--nf-poppins",
   display: "swap",
 });
 
@@ -55,7 +49,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${serif.variable} ${grotesk.variable} ${khmer.variable}`}
+      className={`${poppins.variable} ${khmer.variable}`}
       suppressHydrationWarning
     >
       <body>

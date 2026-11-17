@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "../utils/supabase/client";
+import FormField from "./FormField.js";
 
 const COPY = {
   login: {
@@ -92,22 +93,17 @@ export default function AuthForm({ mode }) {
                 required
               />
             </div>
-            <div className="auth-field">
-              <label className="auth-label" htmlFor={`${mode}-password`}>
-                Password
-              </label>
-              <input
-                id={`${mode}-password`}
-                className="auth-input"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete={mode === "login" ? "current-password" : "new-password"}
-                required
-                // Only new passwords must be 8+; old accounts may still have 6.
-                minLength={mode === "signup" ? 8 : undefined}
-              />
-            </div>
+            <FormField
+              id={`${mode}-password`}
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete={mode === "login" ? "current-password" : "new-password"}
+              required
+              // Only new passwords must be 8+; old accounts may still have 6.
+              minLength={mode === "signup" ? 8 : undefined}
+            />
             {error ? (
               <p className="auth-error" role="alert">
                 {error}
