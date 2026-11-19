@@ -154,7 +154,7 @@ I used Claude models through Claude Code for most of the build, and Cline in VS 
 
 ---
 
-## 6. Sources and c### Where the entries come from
+## 6. Sources and Credits Where the entries come from
 
 All eight published entries are general history, credited on the site as "Common in Khmer households". They describe kitchen tools found across Cambodia, not one family's household.
 
